@@ -1,6 +1,6 @@
 # Hockey clock practice: Nevco 871 and MPC-7
 
-Standalone HTML/CSS/JavaScript. Open `dist/index.html` or serve `dist/` with a static HTTP server. No Rails, database, or application packages are required. 
+Standalone HTML/CSS/JavaScript. Open `dist/index.html` or serve `dist/` with a static HTTP server. No other binary, database, or application packages are required. 
 
 ## License
 
