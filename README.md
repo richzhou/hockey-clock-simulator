@@ -1,6 +1,6 @@
 # Hockey clock practice: Nevco 871 and MPC-7
 
-Standalone HTML/CSS/JavaScript. Open `dist/index.html` or serve `dist/` with a static HTTP server. No Rails, database, or application packages are required. The source is separate from VersaCloudERP.
+Standalone HTML/CSS/JavaScript. Open `dist/index.html` or serve `dist/` with a static HTTP server. No Rails, database, or application packages are required. 
 
 ## License
 
