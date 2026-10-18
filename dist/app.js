@@ -1,0 +1,132 @@
+'use strict';
+let game=new HockeyConsole();const $=id=>document.getElementById(id);let activeTasks=practiceTasks;let practice=new PracticeSession(activeTasks);game.connectHandheld(true);
+const left=[['horn','Horn'],['misc','Misc.<br>Shot<br>Time'],[null,''],['set','Set'],[null,''],['penalty-insert','Penalty<br>Insert'],['penalty-edit','Penalty<br>Edit'],['time','Time'],['penalty-toggle','Penalty<br>On<br>Off'],['penalty-clear','Penalty<br>Clear'],[null,''],[null,''],['time-on','Time<br>On'],['home-goal','Home<br>Goal'],['home-penalty','Home<br>Penalty'],['home-shots','Home<br>Shots'],['time-off','Time<br>Off'],['guest-goal','Guest<br>Goal'],['guest-penalty','Guest<br>Penalty'],['guest-shots','Guest<br>Shots']];
+const right=[['timeout-start','Time Out<br>Start'],['timeout-clear','Time Out<br>Clear'],['options','Options'],['yes','Yes'],['7','7'],['8','8'],['9','9'],['no','No'],['4','4'],['5','5'],['6','6'],['chronometer','Chronometer<br><small>(Time of Day)</small>'],['1','1'],['2','2'],['3','3'],['home-score','Home<br>Score'],[null,''],['blank','Blank'],['0','0'],['guest-score','Guest<br>Score']];
+
+const mpc7Left=[['horn','Horn'],['home-new-minor','<small>HOME</small>New<br>Minor'],['guest-new-minor','<small>GUESTS</small>New<br>Minor'],['set','Set'],['penalty-insert','Insert<br>Penalty'],['home-new-major','New<br>Major'],['guest-new-major','New<br>Major'],['time','Time'],['penalty-toggle','Penalty<br>On/Off'],['home-penalty','View<br>Penalty'],['guest-penalty','View<br>Penalty'],['penalty-edit','Edit<br>Penalty'],['time-on','Time<br>On'],['home-saves','Goal<br>Saves'],['guest-saves','Goal<br>Saves'],['penalty-clear','Clear<br>Penalty'],['time-off','Time<br>Off'],['home-shots','Goal<br>Shots'],['guest-shots','Goal<br>Shots'],['period','Period']];
+const mpc7Right=[['timeout-start','Time Out<br>Timer'],['goal-reset','Goal Light<br>Reset'],['options','Options'],['yes','Yes'],['7','7'],['8','8'],['9','9'],['no','No'],['4','4'],['5','5'],['6','6'],['chronometer','Time of<br>Day'],['1','1'],['2','2'],['3','3'],['home-score','Home<br>Score'],['profiles','Scroll<br>Profiles'],['0','0'],['blank','Blank'],['guest-score','Guest<br>Score']];
+let currentModel='871';
+function isMPC7(){return $('machine-model').value==='mpc7';}
+function buildKeys(){
+ $('function-keys').innerHTML=(isMPC7()?mpc7Left:left).map(keyMarkup).join('');document.querySelector('.number-side').innerHTML=(isMPC7()?mpc7Right:right).map(keyMarkup).join('');
+ if(isMPC7())for(const bank of ['home','guest']){for(const button of document.querySelectorAll('[data-key^="'+bank+'-"]')){button.classList.add('team-'+bank);button.setAttribute('aria-label',bank+' '+button.getAttribute('aria-label'));}}
+}
+
+function keyMarkup([key,label]){if(!key)return '<span class="blank-key" aria-hidden="true"></span>';return `<button type="button" data-key="${key}" class="${/^\d$/.test(key)?'number':''}" aria-label="${label.replace(/<[^>]*>/g,' ')}" ${key==='misc'?'title="Accessory shot clocks are outside this simulator’s scope" aria-disabled="true"':''}>${label}</button>`;}
+buildKeys();
+const remote=document.createElement('section');remote.className='handheld';remote.setAttribute('aria-label','Handheld time control switch');remote.innerHTML='<div class="handheld-cord" aria-hidden="true"><svg viewBox="0 0 80 52" focusable="false"><path d="M40 52 V48 C10 48 10 40 40 40 S70 32 40 32 S10 24 40 24 S70 16 40 16 S10 8 40 8 V0" fill="none" stroke="#252d28" stroke-width="7" stroke-linecap="round"/><path d="M40 52 V48 C10 48 10 40 40 40 S70 32 40 32 S10 24 40 24 S70 16 40 16 S10 8 40 8 V0" fill="none" stroke="#747c75" stroke-width="2"/></svg></div><div class="handheld-case"><span class="handheld-led" aria-hidden="true"></span><span class="handheld-name">NEVCO <small>TCS-5</small></span><button type="button" id="handheld-horn" aria-label="Hold handheld horn" aria-pressed="false">HORN</button><span class="rocker-caption">TIME</span><button type="button" id="remote-toggle" role="switch" aria-checked="false" aria-label="Handheld time rocker"><span class="rocker-off">OFF</span><span class="rocker-on">ON</span></button><span id="handheld-state">CONNECTED</span></div><button type="button" id="handheld-connect">Unplug</button>';
+document.querySelector('.console').after(remote);
+const powerKey=document.createElement('button');powerKey.type='button';powerKey.dataset.key='power-off';powerKey.className='power-key';powerKey.setAttribute('aria-label','Turn console power off');powerKey.textContent='POWER ON';document.querySelector('.console-bottom').append(powerKey);
+let sound=false,audioContext,lastHorn=0,hornUntil=0,heldOsc=null,autoOsc=null,manualHorn=false,manualTimer=null;const history=[];
+function silenceHorn(){stopManualHorn();if(autoOsc){try{autoOsc.stop();}catch{}autoOsc=null;}hornUntil=0;}
+function playHorn(duration=900){if(autoOsc){try{autoOsc.stop();}catch{}autoOsc=null;}hornUntil=performance.now()+duration;if(!sound)return;try{audioContext??=new (window.AudioContext||window.webkitAudioContext)();audioContext.resume();const o=audioContext.createOscillator(),g=audioContext.createGain();autoOsc=o;o.onended=()=>{if(autoOsc===o)autoOsc=null;};o.type='sawtooth';o.frequency.value=180;g.gain.value=.06;o.connect(g);g.connect(audioContext.destination);o.start();g.gain.exponentialRampToValueAtTime(.001,audioContext.currentTime+duration/1000);o.stop(audioContext.currentTime+duration/1000);}catch{}}
+
+function press(key,source='console',powerConfirmed=false){if(!powerConfirmed&&(key==='power-on'||key==='power-off')){const turningOn=key==='power-on';$('power-dialog-title').textContent=turningOn?'Turn console power on?':'Turn console power off?';$('power-dialog-message').textContent=turningOn?'This starts the console’s power-on sequence.':'This stops the clock and turns off the console.';$('confirm-power').textContent=turningOn?'Power on':'Power off';$('power-dialog').dataset.powerAction=key;$('power-dialog').showModal();return;}const blocked=source!=='handheld'&&game.timeKeysLocked&&(key==='time-on'||key==='time-off');if(!blocked&&(key==='time-off'||key==='power-off'))silenceHorn();game.press(key,source);if(!blocked)practice.record(key,game);history.push(key);if(history.length>8)history.shift();$('history').replaceChildren(...history.map(k=>{const b=document.createElement('b');b.textContent=k.replaceAll('-',' ').toUpperCase();return b;}));render();}
+document.querySelector('.console').addEventListener('click',event=>{const b=event.target.closest('[data-key]');if(!b)return;if(b.dataset.key==='horn'&&b.dataset.heldClick==='true'){b.dataset.heldClick='false';return;}press(b.dataset.key);});
+const remoteHorn=$('handheld-horn');
+function stopManualHorn(){manualHorn=false;if(heldOsc){try{heldOsc.stop();}catch{}heldOsc=null;}clearTimeout(manualTimer);hornUntil=0;}
+function bindHorn(button,handheld=false){
+ function begin(){if(!game.powered||game.mode.startsWith('startup-')||(!handheld&&game.set)||(handheld&&!game.handheldConnected))return false;silenceHorn();button.dataset.heldClick='true';manualHorn=true;hornUntil=performance.now()+4000;manualTimer=setTimeout(stopManualHorn,4000);if(sound){try{audioContext??=new (window.AudioContext||window.webkitAudioContext)();audioContext.resume();heldOsc=audioContext.createOscillator();const gain=audioContext.createGain();heldOsc.type='sawtooth';heldOsc.frequency.value=180;gain.gain.value=.06;heldOsc.connect(gain);gain.connect(audioContext.destination);heldOsc.start();}catch{}}practice.record('horn',game);render();return true;}
+ button.addEventListener('pointerdown',e=>{if(begin())button.setPointerCapture(e.pointerId);});
+ button.addEventListener('pointerup',stopManualHorn);button.addEventListener('pointercancel',()=>{button.dataset.heldClick='false';stopManualHorn();});
+ button.addEventListener('keydown',e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();if(!e.repeat)begin();}});
+ button.addEventListener('keyup',e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();button.dataset.heldClick='false';stopManualHorn();}});
+ if(handheld)button.addEventListener('click',e=>e.preventDefault());
+}
+bindHorn(document.querySelector('[data-key="horn"]'));bindHorn(remoteHorn,true);window.addEventListener('blur',silenceHorn);
+$('remote-toggle').onclick=e=>{const rect=e.currentTarget.getBoundingClientRect();const on=e.detail?e.clientX>=rect.x+rect.width/2:!game.handheldOn;press(on?'time-on':'time-off','handheld');};
+$('handheld-connect').onclick=()=>{silenceHorn();game.connectHandheld(!game.handheldConnected);game.unsupportedFeature=!game.handheldConnected&&game.powered?'To use console TIME keys, turn the control off, unplug the switch, and restart it.': '';guideSignature='';render();};
+function actionLabel(key){
+ if(game.handheldConnected&&key==='time-on')return 'HANDHELD ON';if(game.handheldConnected&&key==='time-off')return 'HANDHELD OFF';
+ const names={'home-penalty':'HOME VIEW PENALTY','guest-penalty':'GUEST VIEW PENALTY','timeout-start':'TIME OUT TIMER','penalty-clear':'CLEAR PENALTY','penalty-edit':'EDIT PENALTY','penalty-insert':'INSERT PENALTY','profiles':'SCROLL PROFILES','home-saves':'HOME GOAL SAVES','guest-saves':'GUEST GOAL SAVES','home-shots':'HOME GOAL SHOTS','guest-shots':'GUEST GOAL SHOTS'};
+ return isMPC7()&&names[key]||keyLabel(key);
+}
+
+function stepInstruction(step){return game.handheldConnected?step.instruction.replaceAll('alternate time control switch','handheld time switch').replaceAll('alternate switch','handheld switch').replaceAll('TIME ON','HANDHELD ON').replaceAll('TIME OFF','HANDHELD OFF'):step.instruction;}
+function render(){
+ practice.observe(game);const queueText=['home','guest'].map(team=>{const count=game[team].penalties.length-game.activePenalties(game[team]).length;return count>0?team.toUpperCase()+': '+count+' additional '+(count===1?'penalty':'penalties')+' stored':'';}).filter(Boolean).join(' · ');queueSummary.hidden=!queueText;if(queueSummary.textContent!==queueText)queueSummary.textContent=queueText;scopeNotice.hidden=!game.unsupportedFeature;scopeNotice.textContent=game.unsupportedFeature;powerKey.dataset.key=game.powered?'power-off':'power-on';powerKey.textContent=game.powered?'POWER ON':'POWER OFF';powerKey.setAttribute('aria-label',game.powered?'Turn console power off':'Turn console power on');document.querySelector('.console').classList.toggle('powered-off',!game.powered);
+ $('game-time').textContent=formatTime(game.time,game.tenths);$('period').textContent=game.period;$('direction').textContent=game.up?'COUNT UP':'COUNT DOWN';$('board-status').textContent=!game.powered?'CONTROL POWER OFF':game.running?'● CLOCK RUNNING':'● CLOCK STOPPED';
+ for(const team of ['home','guest']){for(const field of (isMPC7()?['score','shots','saves']:['score','shots']))$(team+'-'+field).textContent=game[team][field];$(team+'-goal').classList.toggle('on',game[team].goal);const container=$(team+'-penalties');container.replaceChildren();if(!game[team].penalties.length){container.textContent='NO PENALTIES';}else game.activePenalties(game[team]).forEach((p,i)=>{const row=document.createElement('div');row.textContent='#'+String(p.player).padStart(2,'0')+'  '+formatTime(p.time);container.append(row);});}
+ $('penalty-status').textContent='PENALTY CLOCKS '+(game.penaltiesOn?'ON':'PAUSED');const display=!game.powered?'':game.mode==='chronometer'?new Date().toLocaleTimeString():game.mode==='view-penalty'?game.penaltyDisplay():game.display();const scrollText=display+'   ';const offset=display.length>16?Math.floor(performance.now()/350)%scrollText.length:0;$('console-display').textContent=display.length>16?(scrollText+scrollText).slice(offset,offset+16):display;$('console-display').setAttribute('aria-label',display);
+ $('timeout-display').hidden=game.timeout===null;$('timeout-display').textContent=game.timeout===null?'':(game.timeout>=0?'TIME OUT ':'TIME OUT OVER +')+formatTime(Math.abs(game.timeout));
+ if(game.hornEvent!==lastHorn){lastHorn=game.hornEvent;playHorn(game.time===0&&game.message==='END OF PERIOD'?4000:900);}$('horn-indicator').hidden=performance.now()>hornUntil;
+ $('remote-toggle').setAttribute('aria-checked',String(game.handheldOn));$('remote-toggle').classList.toggle('on',game.handheldOn);const ready=game.powered&&!game.mode.startsWith('startup-');$('remote-toggle').disabled=!game.handheldConnected||!ready;remoteHorn.disabled=!game.handheldConnected||!ready;remoteHorn.setAttribute('aria-pressed',String(manualHorn));remoteHorn.classList.toggle('sounding',manualHorn);remote.classList.toggle('connected',game.handheldConnected);remote.classList.toggle('powered',game.powered);setText('handheld-state',!game.handheldConnected?'UNPLUGGED':!game.powered?'POWER OFF':game.running?'CLOCK RUNNING':'CONNECTED');setText('handheld-connect',game.handheldConnected?'Unplug':'Connect');for(const key of ['time-on','time-off'])document.querySelector('[data-key="'+key+'"]').setAttribute('aria-disabled',String(game.timeKeysLocked));updateExercise();updateMobileUI();
+}
+const coach=document.createElement('div');coach.className='coach';coach.hidden=true;coach.setAttribute('aria-live','polite');document.querySelector('.console').before(coach);
+const scopeNotice=document.createElement('div');scopeNotice.className='training-notice';scopeNotice.setAttribute('role','status');scopeNotice.hidden=true;document.querySelector('.console').before(scopeNotice);
+const queueSummary=document.createElement('div');queueSummary.className='queued-penalties';queueSummary.setAttribute('role','status');queueSummary.hidden=true;document.querySelector('.console').before(queueSummary);
+function populateTasks(){
+ const freeOption=document.createElement('option');freeOption.value='free';freeOption.textContent='Free practice — no guide';$('exercise').replaceChildren(freeOption);const groups={};
+ for(const [id,task]of Object.entries(activeTasks)){if(!groups[task.group]){const group=document.createElement('optgroup');group.label=task.group;groups[task.group]=group;$('exercise').append(group);}const option=document.createElement('option');option.value=id;option.textContent=task.title;groups[task.group].append(option);}
+}
+populateTasks();
+let guideSignature='';
+$('exercise').onchange=()=>{guideSignature='';render();};
+function resetHistory(){silenceHorn();lastHorn=game.hornEvent;history.length=0;$('history').textContent='Your key presses appear here.';last=performance.now();$('speed').value='1';}
+function startTask(){if($('task-dialog').open)$('task-dialog').close();setPhoneView('console');practice.start($('exercise').value,game);resetHistory();guideSignature='';render();}
+function updateExercise(){
+ const selected=$('exercise').value,active=practice.task,step=practice.current;
+ const signature=JSON.stringify([selected,active?.title,game.handheldConnected,practice.stepIndex,practice.keyIndex,practice.completed,practice.failed,practice.feedback,step?.wait?game.running:null]);if(signature===guideSignature)return;guideSignature=signature;
+ document.querySelectorAll('.next-key').forEach(b=>{b.classList.remove('next-key');b.removeAttribute('aria-description');});
+ coach.hidden=!active;coach.classList.toggle('has-hint',!!active&&!!practice.feedback);renderTaskPreview(selected);
+ if(!active){coach.replaceChildren();return;}
+ if(practice.completed)coach.innerHTML='<b class="task-complete">✓ Task complete</b><span>'+active.title+'</span>';
+ else{
+  const key=step.wait?(game.running?null:'time-on'):practice.expected;const next=key?(game.handheldConnected&&(key==='time-on'||key==='time-off')?$('remote-toggle'):document.querySelector('[data-key="'+key+'"]')):null;
+  if(!practice.failed){next?.classList.add('next-key');next?.setAttribute('aria-description','Next key in the practice walkthrough');}
+  coach.innerHTML='<div><small>STEP '+(practice.stepIndex+1)+' OF '+active.steps.length+'</small><b>'+(practice.failed?'Restart this task to continue':step.wait?(game.running?'Watch the clocks':'Click '+actionLabel('time-on')+' to resume'):'Click '+actionLabel(key))+'</b></div><span>'+stepInstruction(step)+'</span>';
+ }
+ const progress=document.createElement('div');progress.className='guide-progress';progress.setAttribute('role','progressbar');progress.setAttribute('aria-label','Walkthrough progress');progress.setAttribute('aria-valuemin','0');progress.setAttribute('aria-valuemax',String(active.steps.length));progress.setAttribute('aria-valuenow',String(practice.completed?active.steps.length:practice.stepIndex));const fill=document.createElement('i');fill.style.width=(practice.completed?100:practice.stepIndex/active.steps.length*100)+'%';progress.append(fill);coach.prepend(progress);
+ if(practice.feedback){const hint=document.createElement('div');hint.className='mistake-hint';hint.id='practice-mistake-hint';const title=document.createElement('strong');title.textContent='Practice hint';const message=document.createElement('p');message.textContent=game.handheldConnected?practice.feedback.replaceAll('TIME ON','HANDHELD ON').replaceAll('TIME OFF','HANDHELD OFF'):practice.feedback;const restart=document.createElement('button');restart.type='button';restart.dataset.practice='restart';restart.textContent='Restart task';hint.append(title,message,restart);coach.append(hint);}
+}
+function renderTaskPreview(selected){if(selected==='free'){$('exercise-body').innerHTML='<p>Explore the console without a guide.</p><button class="guide-primary" data-practice="free">Use free practice</button>';return;}const task=activeTasks[selected];$('exercise-body').innerHTML='<p>'+task.description+'</p><p class="task-meta">'+task.steps.length+' guided steps</p><button class="guide-primary" data-practice="start">Start walkthrough</button><p class="task-note">Starts a new sample game.</p>';}
+function handlePracticeAction(event){const action=event.target.closest('[data-practice]')?.dataset.practice;if(action==='start')startTask();else if(action==='restart'){$('exercise').value=practice.id;startTask();}else if(action==='free'){practice.task=null;practice.completed=false;practice.failed=false;practice.feedback='';$('exercise').value='free';if($('task-dialog').open)$('task-dialog').close();$('exercise').onchange();}}
+$('exercise-body').addEventListener('click',handlePracticeAction);coach.addEventListener('click',handlePracticeAction);document.querySelector('.mobile-coach').addEventListener('click',handlePracticeAction);
+$('sound').onclick=()=>{sound=!sound;$('sound').textContent=sound?'♬ Sound on':'♬ Sound off';$('sound').setAttribute('aria-pressed',String(sound));};
+$('help-toggle').onclick=()=>{$('reference').open=!$('reference').open;if($('reference').open)$('reference').scrollIntoView({behavior:'smooth',block:'center'});};
+$('cancel-power').onclick=()=>$('power-dialog').close();$('confirm-power').onclick=()=>{const key=$('power-dialog').dataset.powerAction;$('power-dialog').close();press(key,'console',true);};
+$('reset').onclick=()=>$('reset-dialog').showModal();$('cancel-reset').onclick=()=>$('reset-dialog').close();$('confirm-reset').onclick=()=>{game.reset();resetHistory();practice.task=null;practice.feedback='';$('exercise').value='free';$('exercise').onchange();$('reset-dialog').close();render();};
+document.addEventListener('keydown',e=>{if(['SELECT','INPUT','TEXTAREA','BUTTON'].includes(document.activeElement.tagName)||document.querySelector('dialog[open]'))return;if(e.repeat)return;let key=/^\d$/.test(e.key)?e.key:({Enter:'yes',Escape:'no',s:'set',t:'time',h:'horn',' ':(game.handheldConnected?game.handheldOn:game.running)?'time-off':'time-on'})[e.key];if(e.key==='Backspace'){e.preventDefault();game.buffer=game.buffer.slice(0,-1);render();return;}if(!key)return;e.preventDefault();const handheld=game.handheldConnected&&e.key===' ';press(key,handheld?'handheld':'console');const b=handheld?$('remote-toggle'):document.querySelector(`[data-key="${key}"]`);b?.classList.add('pressed');setTimeout(()=>b?.classList.remove('pressed'),130);});
+const mobileLayout=window.matchMedia('(max-width:800px), (max-width:1000px) and (max-height:600px)');
+const taskCard=document.querySelector('.practice-card');$('task-picker').append(taskCard);
+const toolsHome=document.createElement('div');document.querySelector('.under-console').before(toolsHome);const referenceHome=document.createElement('div');$('reference').before(referenceHome);
+function openTaskPicker(){if(practice.task)$('exercise').value=practice.id;guideSignature='';render();$('task-dialog').showModal();}
+$('task-toggle').onclick=openTaskPicker;$('task-close').onclick=()=>$('task-dialog').close();
+$('tools-toggle').onclick=()=>{$('tools-content').append(document.querySelector('.under-console'),$('reference'));$('tools-dialog').showModal();};
+$('tools-close').onclick=()=>$('tools-dialog').close();
+$('tools-dialog').addEventListener('close',()=>{toolsHome.after(document.querySelector('.under-console'));referenceHome.after($('reference'));});
+const portraitLayout=window.matchMedia('(max-width:600px) and (orientation:portrait)');let portraitBoardVisible=true;
+function updateBoardControl(){
+ const portrait=portraitLayout.matches,shown=portrait?portraitBoardVisible:document.body.dataset.phoneView==='board';
+ document.body.dataset.portraitBoard=portraitBoardVisible?'shown':'hidden';$('view-toggle').textContent=portrait?(shown?'Hide board':'Show board'):(shown?'Console':'Scoreboard');
+ $('view-toggle').setAttribute('aria-label',portrait?(shown?'Hide scoreboard':'Show scoreboard'):(shown?'Show console':'Show scoreboard'));
+ $('view-toggle').setAttribute('aria-pressed',String(shown));$('view-toggle').setAttribute('aria-expanded',String(shown));$('view-toggle').setAttribute('aria-controls','scoreboard');
+}
+function setPhoneView(view){document.body.dataset.phoneView=portraitLayout.matches?'console':view;updateBoardControl();if(mobileLayout.matches)document.querySelector('main').scrollTop=0;}
+$('view-toggle').onclick=()=>{if(portraitLayout.matches){portraitBoardVisible=!portraitBoardVisible;updateBoardControl();}else setPhoneView(document.body.dataset.phoneView==='board'?'console':'board');};
+mobileLayout.addEventListener('change',()=>{setPhoneView('console');window.scrollTo(0,0);});
+portraitLayout.addEventListener('change',()=>{setPhoneView('console');window.scrollTo(0,0);});
+updateBoardControl();
+function setText(id,value){if($(id).textContent!==value)$(id).textContent=value;}
+function updateMobileUI(){
+ setText('focus-time',formatTime(game.time,game.tenths));setText('focus-score','HOME '+game.home.score+' · GUEST '+game.guest.score);setText('focus-period','P'+game.period+' · '+(game.running?'RUNNING':'STOPPED'));
+ const active=practice.task,step=practice.current,failed=practice.failed;
+ const next=active&&!practice.completed?(step.wait?(game.running?'Watch the clocks':'Tap '+actionLabel('time-on')):failed?'Restart this task':'Tap '+actionLabel(practice.expected)):'Explore the console';
+ setText('mobile-step',active?(practice.completed?'TASK COMPLETE':'STEP '+(practice.stepIndex+1)+' OF '+active.steps.length):'FREE PRACTICE');
+ setText('mobile-next',game.unsupportedFeature?'Console notice':active&&practice.completed?'Task complete ✓':next);
+ setText('mobile-instruction',game.unsupportedFeature||(active?(practice.completed?active.title+' is complete. Choose another task with Walkthroughs above.':stepInstruction(step)):(isMPC7()?'Practice the MPC-7 setup for Kensington and Burnaby Lake. Tap Walkthroughs to choose a task.':'Practice the Nevco 871 used at Rosemary Brown Arena. Tap Walkthroughs above to choose a guided task.')));
+ const wrong=practice.feedback.match(/^You pressed (.+?)\. Next,/);
+ const feedback=practice.feedback?(failed?'The result changed. Restart this task.':wrong?'Pressed '+wrong[1]+'. '+next+'.':'Keep the clock running for this step.'):'';
+ setText('mobile-feedback',feedback);$('mobile-feedback').hidden=!feedback;document.querySelector('.mobile-coach').classList.toggle('has-hint',!!feedback);$('mobile-actions').hidden=!active;
+}
+let last=performance.now();setInterval(()=>{const now=performance.now(),elapsed=now-last;last=now;game.tick(elapsed*Number($('speed').value));render();},50);
+const legacyReference=$('reference').querySelector('div').innerHTML;
+$('machine-model').onchange=()=>{
+ if(currentModel===$('machine-model').value)return;currentModel=$('machine-model').value;
+ silenceHorn();game=isMPC7()?new MPC7Console():new HockeyConsole();game.connectHandheld(true);activeTasks=isMPC7()?mpc7PracticeTasks:practiceTasks;practice=new PracticeSession(activeTasks);populateTasks();buildKeys();bindHorn(document.querySelector('[data-key="horn"]'));
+ document.body.classList.toggle('model-mpc7',isMPC7());document.querySelector('.nevco small').textContent=isMPC7()?'MPC-7 SERIES · HOCKEY':'MPC CONTROL · MODEL CODE 871';document.querySelector('.edition').innerHTML=(isMPC7()?'MPC-7 SERIES':'MODEL 871')+' <i></i> HOCKEY';document.querySelector('.handheld-name small').textContent=isMPC7()?'TCS-7':'TCS-5';
+ const link=$('manual-link');link.href=isMPC7()?'https://nevcodocs.s3.amazonaws.com/Controls/MPC-7/Hockey.PDF':'https://nevcodocs.s3.amazonaws.com/Controls/MPC-6/Hockey/871.PDF';
+ $('reference').querySelector('div').innerHTML=isMPC7()?'<p><b>Set time</b><br>SET → TIME → MM SS → YES. Five digits accept automatically.</p><p><b>Set period</b><br>PERIOD → number.</p><p><b>Add a goal / shot / save</b><br>Team SCORE / GOAL SHOTS / GOAL SAVES → 1. GOAL LIGHT RESET clears goal lights.</p><p><b>New penalty</b><br>Team NEW MINOR / NEW MAJOR → player (2 digits) → YES for preset, or M SS for custom time.</p><p><b>View / edit / clear</b><br>Press the same team’s VIEW PENALTY repeatedly until the correct player appears on the operator display. EDIT PENALTY → player or YES to keep → M SS or YES to keep. CLEAR PENALTY removes immediately.</p><p><b>New hockey game</b><br>SCROLL PROFILES → YES. Sample hockey profile is preconfigured.</p><p><b>Timeout</b><br>TIME OUT TIMER → 1–5. Press again on the timeout screen for warning, then again to end. Sample timer 1 = 30 seconds.</p><p><b>Penalty pause</b><br>OPTIONS cycles menus; Penalties → YES → YES toggles Enable Button. NO exits. PENALTY ON/OFF then pauses penalties for a break.</p><p>Wireless, other sports, electronic team names, auxiliary and segment timers are outside this practice tool.</p>':legacyReference;
+ for(const team of ['home','guest'])$(team+'-saves-summary').hidden=!isMPC7();resetHistory();guideSignature='';setPhoneView('console');render();
+};
+$('exercise').onchange();render();

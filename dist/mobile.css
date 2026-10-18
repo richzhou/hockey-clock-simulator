@@ -1,0 +1,119 @@
+/* Shared controls; phone practice never moves instructions away from the keys. */
+.coach{flex-wrap:wrap}.coach>.guide-progress{flex-basis:100%;margin:0;height:4px}
+.control-bar{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:8px;padding:6px 5vw;background:#e1e6dc;border-bottom:1px solid #bfcbb9;min-height:58px}
+.model-choice{display:flex;flex-direction:column;gap:2px;font-size:9px;font-weight:bold;color:#465d45}
+.model-choice select{width:160px;padding:6px;border:1px solid #a7b59d;border-radius:4px;background:#f5f6ef;color:#283d2d;font-size:12px}
+.control-bar button{min-height:44px;border:1px solid #9eaf96;border-radius:5px;background:#f5f6ef;color:#314c36;font-size:12px;padding:6px 12px;white-space:nowrap}
+.control-bar #task-toggle{background:#345b3b;border-color:#345b3b;color:#fff;font-weight:bold}
+.compact-game{margin-left:auto;display:flex;align-items:center;gap:9px;font:11px monospace;color:#41553e}.compact-game strong{font-size:20px;color:#273d31}
+.control-bar #view-toggle{display:none}.mobile-coach{display:none}
+#task-dialog,#tools-dialog{width:min(560px,calc(100vw - 16px));max-width:none;max-height:calc(100dvh - 12px);padding:12px}
+.dialog-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}.dialog-heading h2{font:20px Georgia;margin:0}.dialog-heading button{margin:0;min-height:32px;padding:6px 10px}
+#task-picker .practice-card{padding:0;background:none;border:0}#task-picker .practice-card>.eyebrow,#task-picker .practice-card>h2,#task-picker .practice-card>p{display:none}
+#task-picker label{margin:4px 0;font-size:11px}#task-picker select{font-size:16px;min-height:40px;padding:6px}#task-picker .guide-primary{min-height:40px;max-width:none;margin:4px 0 0;padding:8px;font-size:12px}
+#task-picker #exercise-body{margin-top:6px}#task-picker #exercise-body>p{margin:6px 0;font-size:12px;line-height:1.4}#task-picker .task-meta{display:none}#task-picker #exercise-body .task-note{font-size:10px;margin:4px 0}
+#tools-content .under-console{margin-top:12px;flex-wrap:wrap}#tools-content .quiet,#tools-content select{min-height:44px}#tools-content select{font-size:16px}#tools-content .history{display:none}
+@media (max-width:800px), (max-width:1000px) and (max-height:600px){
+ body{overflow:hidden;--toolbar-h:44px}
+ body>header,.intro,main>footer{display:none}
+ .control-bar{height:var(--toolbar-h);min-height:0;gap:5px;padding:0 max(4px,env(safe-area-inset-right)) 0 max(4px,env(safe-area-inset-left));border:0}
+ .control-bar button{height:44px;min-height:44px;font-size:11px;padding:4px 8px}.control-bar #view-toggle{display:block}
+ .model-choice{font-size:8px;flex-shrink:0}.model-choice select{width:132px;min-height:28px;padding:3px;font-size:16px}
+ .compact-game{gap:5px;font-size:9px;flex-wrap:wrap;justify-content:center;line-height:1.1}.compact-game strong{font-size:16px}.compact-game #focus-period{font-size:8px}
+ main{margin:0;width:100%;max-width:none;height:calc(100vh - var(--toolbar-h));height:calc(100dvh - var(--toolbar-h));padding:2px max(2px,env(safe-area-inset-right)) max(2px,env(safe-area-inset-bottom)) max(2px,env(safe-area-inset-left));overflow:auto}
+ .workspace{display:block;margin:0;height:100%}.console-section{display:grid;grid-template-columns:minmax(165px,25%) minmax(0,1fr) 78px;gap:6px;height:100%;min-width:0}
+ .section-caption,aside,.console-section .coach,.console-section .training-notice,.console-section .queued-penalties,.console-section .remote,.console-section .under-console,.history{display:none}
+ .mobile-coach{display:flex;flex-direction:column;align-items:stretch;gap:5px;background:#fff8de;border:1px solid #c5a749;border-left:3px solid #bc8c21;border-radius:5px;padding:7px;color:#414a2c;min-width:0}
+ .mobile-coach>small{font-size:9px;letter-spacing:.5px;font-weight:bold}.mobile-coach h2{font:700 14px/1.2 Arial;margin:0;color:#36492d}.mobile-coach p{font-size:12px;line-height:1.35;margin:0}
+ .mobile-coach #mobile-feedback{font-size:11px;font-weight:bold;color:#71481b;border-top:1px solid #d5b978;padding-top:5px}.mobile-coach.has-hint{background:#fff0c8;border-color:#bd8c37}
+ #mobile-actions{display:flex;flex-wrap:wrap;gap:4px;margin-top:auto;padding-top:4px}#mobile-actions[hidden]{display:none}#mobile-actions button{padding:5px 6px;min-height:32px;border:1px solid #b89a5a;border-radius:4px;background:#fffcf1;color:#58451e;font-size:10px}
+ .console{height:100%;min-height:264px;display:grid;grid-template-rows:24px minmax(0,1fr);gap:2px;padding:2px;border-radius:8px;box-shadow:none;min-width:0}
+ .console-top{padding:0 58px 0 3px;gap:4px;flex-wrap:nowrap}.nevco{font-size:16px}.nevco small,.console-sport,.display-wrap>span{display:none}
+ .display-wrap{min-width:0}.display-wrap output{height:24px;width:200px;max-width:100%;font-size:12px;padding:2px 4px;border-width:2px;letter-spacing:1px}
+ .console-bottom{display:contents}.console-bottom>span{display:none}.console-bottom .power-key{position:absolute;right:2px;top:2px;width:54px;min-height:24px;font-size:7px;padding:2px}
+ .console:before,.console:after{display:none}
+ .keys-layout{min-height:0;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px;padding:0;border-radius:5px}
+ .function-keys,.number-side{min-height:0;grid-template-rows:repeat(5,minmax(0,1fr));gap:1px;border-width:2px;border-radius:7px;padding:0}
+ .keys-layout button{min-height:0;font-size:10px;line-height:1;padding:2px 1px 11px;border-radius:5px}
+ .keys-layout button.number{font-size:22px;padding-bottom:11px}.keys-layout button:after,.blank-key:after{height:6px;bottom:2px;border-width:2px}
+ .keys-layout button[data-key=yes],.keys-layout button[data-key=no]{font-size:15px}.keys-layout button[data-key=chronometer]{font-size:8px}
+ body[data-phone-view=console] .scoreboard{display:none}body[data-phone-view=board] .workspace{display:none}
+ .scoreboard{max-height:100%}.board-main{padding:10px}.clock #game-time{font-size:44px}.score{font-size:38px}.penalty-strips{padding:7px;min-height:44px}
+}
+@media (max-width:600px) and (orientation:portrait){
+ body{--toolbar-h:98px}
+ .control-bar{display:grid;grid-template-columns:1fr 1fr 76px;grid-template-rows:44px 44px;gap:4px;padding:3px 4px}
+ .model-choice{grid-column:1;grid-row:1}.model-choice select{width:100%;max-width:160px}.control-bar #task-toggle{grid-column:2;grid-row:1}.control-bar #tools-toggle{grid-column:3;grid-row:1}
+ .compact-game{grid-column:1/3;grid-row:2;margin:0;justify-content:flex-start;gap:8px}.control-bar #view-toggle{grid-column:3;grid-row:2;padding:3px;font-size:10px}
+ .console-section{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(264px,1fr) 82px;gap:5px}
+ .mobile-coach{padding:7px;gap:4px;position:relative}.mobile-coach p{font-size:12px}.mobile-coach h2{font-size:14px}
+ #mobile-actions{position:absolute;right:6px;top:4px;margin:0;padding:0}#mobile-actions button{font-size:9px;min-height:28px;padding:3px 5px}.mobile-coach>small{padding-right:130px}
+ .console{height:min(100%,340px);align-self:start}
+ .keys-layout{gap:3px}.function-keys,.number-side{border-width:1px}.keys-layout button{font-size:9px}.display-wrap output{width:180px}.nevco{font-size:14px}
+}
+
+/* The handheld is a separate physical control, with a coiled lead and a two-position rocker. */
+.handheld{position:relative;width:132px;margin:28px auto 12px;text-align:center;align-self:center;color:#e5e8df;font-family:Arial,sans-serif}
+.handheld-cord{height:34px;width:52px;margin:0 auto;background:repeating-linear-gradient(102deg,transparent 0 3px,#373c39 4px 7px,#858b84 8px 9px,transparent 10px 13px);border-left:3px solid #363d37;border-right:3px solid #363d37;transform:skew(-10deg);opacity:.25}
+.handheld.connected .handheld-cord{opacity:1}.handheld-case{position:relative;background:linear-gradient(105deg,#a9adaa,#6c736e 55%,#a2a8a2);border:3px solid #4e5750;border-radius:23px 23px 35px 35px;padding:18px 14px 22px;box-shadow:3px 5px 0 #3c433d,0 8px 15px #1d2b2422;display:flex;align-items:center;flex-direction:column;gap:8px}
+.handheld-led{height:7px;width:7px;border-radius:50%;background:#27372a;border:1px solid #18291c}.handheld.connected.powered .handheld-led{background:#8bd45e;box-shadow:0 0 5px #83b655}
+.handheld-name{font-size:9px;color:#252e27;font-style:italic;font-weight:bold;letter-spacing:1px}.handheld-name small{display:block;font-size:7px;letter-spacing:1px;font-style:normal}
+#handheld-horn{border:3px solid #252c27;border-radius:5px;background:linear-gradient(#5f6962,#252d27);color:#fff;font-size:9px;font-weight:bold;min-height:44px;width:58px;padding:4px;box-shadow:0 3px 0 #303b32}
+#handheld-horn:active,#handheld-horn.sounding{background:#3d7447;box-shadow:inset 0 2px 4px #17241b}
+.rocker-caption{font-size:9px;color:#222d25;font-weight:bold;letter-spacing:1px}
+#remote-toggle{display:flex;width:100%;min-height:48px;padding:0;border:3px solid #273129;border-radius:5px;background:#1c251f;cursor:pointer;touch-action:manipulation;box-shadow:0 2px 1px #1e2b21}
+#remote-toggle span{display:flex;align-items:center;justify-content:center;flex:1;font:bold 10px Arial;color:#c9d2ca;min-height:42px;background:linear-gradient(#657067,#313d33);border-radius:2px}
+#remote-toggle .rocker-off{box-shadow:inset 0 4px 4px #07150a;background:#344138;color:#fff}#remote-toggle.on .rocker-off{box-shadow:none;background:linear-gradient(#657067,#313d33);color:#c9d2ca}#remote-toggle.on .rocker-on{box-shadow:inset 0 4px 4px #07150a;background:#344138;color:#fff}
+#remote-toggle.next-key{outline:3px solid #ce9021;outline-offset:3px}#handheld-state{font-size:7px;color:#1f2d23;font-weight:bold;letter-spacing:.5px}#handheld-connect{margin-top:9px;min-height:32px;padding:5px 9px;background:#eff2e9;border:1px solid #a4b39b;border-radius:4px;color:#42593d;font-size:10px}
+.handheld button:disabled{opacity:.45;cursor:default}.keys-layout button[aria-disabled=true]{opacity:.65}
+@media(min-width:1001px),(min-width:801px) and (min-height:601px){.console-section{position:relative;padding-right:155px}.handheld{position:absolute;right:3px;top:100px;margin:0}.under-console{flex-wrap:wrap}}
+@media (max-width:800px), (max-width:1000px) and (max-height:600px){
+ .handheld{grid-column:3;grid-row:1;width:74px;margin:0;align-self:center;justify-self:center}.handheld-cord{height:18px;width:32px}.handheld-case{padding:8px 5px 12px;gap:5px;border-width:2px;border-radius:15px 15px 23px 23px;box-shadow:2px 3px 0 #3c433d}.handheld-name{font-size:7px}.handheld-name small{font-size:6px}.handheld-led{height:5px;width:5px}#handheld-horn{min-height:44px;width:48px;font-size:8px}#remote-toggle{min-height:44px}#remote-toggle span{min-height:38px;font-size:8px}#handheld-connect{margin-top:6px;min-height:28px;font-size:9px;padding:4px 8px}#handheld-state{font-size:6px;letter-spacing:0}
+}
+@media (max-width:600px) and (orientation:portrait){
+ .handheld{grid-column:1;grid-row:3;display:flex;align-items:center;justify-content:center;gap:8px;width:auto;height:80px;justify-self:center;margin:0}.handheld-cord{width:30px;height:30px;transform:rotate(90deg);margin:0}.handheld-case{flex-direction:row;padding:6px 10px;border-radius:18px;gap:7px;height:70px}.handheld-name{font-size:7px}.handheld-led{position:absolute;left:8px;top:5px}.rocker-caption{display:none}#handheld-horn{width:44px}#remote-toggle{width:68px}#handheld-state{position:absolute;bottom:2px;left:8px}#handheld-connect{min-height:44px;margin:0}
+}
+
+.handheld-cord{background:none;border:0;transform:none;pointer-events:none}.handheld-cord svg{display:block;width:100%;height:100%;overflow:visible}
+@media (max-width:600px) and (orientation:portrait){.handheld-cord{transform:rotate(90deg)}}
+
+/* MPC-7 hockey overlay: the two team columns match the manufacturer's key positions. */
+.model-mpc7 .keys-layout{background:linear-gradient(125deg,#86b6ca88,#112e4388),repeating-linear-gradient(45deg,#5f9db5 0 4px,#c0dbe1 5px 70px);border:3px solid #f1b51b}
+.model-mpc7 .keys-layout button{background:#505253;color:#fff;text-transform:uppercase;font-weight:bold}
+.model-mpc7 .keys-layout button.team-home{background:#007748}.model-mpc7 .keys-layout button.team-guest{background:#00a8dc}
+.model-mpc7 .keys-layout button[data-key=time-on]{color:#7bc446}.model-mpc7 .keys-layout button[data-key=time-off]{color:#ff554b}
+.model-mpc7 .keys-layout button[data-key=home-penalty],.model-mpc7 .keys-layout button[data-key=guest-penalty]{font-size:10px}
+.model-mpc7 .keys-layout button.next-key{outline:3px solid #f0b932;outline-offset:1px;box-shadow:0 0 12px #ffe99a}
+.arena-source-note{font-size:12px;line-height:1.5;color:#42523e}.arena-source-note a{color:#315d43}
+.model-mpc7 .handheld.connected.powered .handheld-led{animation:mpc7-indicator 1s steps(1) infinite}@keyframes mpc7-indicator{50%{opacity:.35}}
+@media (prefers-reduced-motion:reduce){.model-mpc7 .handheld.connected.powered .handheld-led{animation:none}}
+@media (max-width:800px), (max-width:1000px) and (max-height:600px){.model-mpc7 .keys-layout{border-width:2px}.model-mpc7 .keys-layout button{font-size:9px}.model-mpc7 .keys-layout button.number{font-size:22px}.model-mpc7 .keys-layout button[data-key=home-penalty],.model-mpc7 .keys-layout button[data-key=guest-penalty]{font-size:8px}}
+
+.model-mpc7 .keys-layout button:after{background:#f5f6f2;border-color:#c6cac7;box-shadow:none}
+.model-mpc7 .keys-layout button[data-key$=new-minor] small{display:block;font-size:6px;line-height:1.2;font-weight:normal;letter-spacing:.7px}
+
+/* In portrait, the live board shares the screen with the practice console. */
+@media (max-width:600px) and (orientation:portrait){
+ main{display:flex;flex-direction:column;gap:5px}
+ body[data-phone-view] .workspace{display:block;flex:1;min-height:0;height:auto}
+ body[data-phone-view][data-portrait-board=shown] .scoreboard{display:block;flex:none;max-height:none}
+ body[data-phone-view][data-portrait-board=hidden] .scoreboard{display:none}
+ .scoreboard{border-width:3px;border-radius:5px;box-shadow:none}
+ .board-top{padding:3px 7px;font-size:6px;letter-spacing:.7px;line-height:1.1}
+ .board-main{padding:3px 7px;grid-template-columns:1fr 1.4fr 1fr}
+ .team h2{font-size:8px;letter-spacing:1px}.score{font-size:30px;line-height:1}
+ .team p{font-size:6px;letter-spacing:0;margin:2px 0}.team p b{font-size:11px;margin-left:4px}
+ #home-saves-summary,#guest-saves-summary{display:none}
+ .clock #game-time{font-size:34px;line-height:1.05;letter-spacing:0}.clock p{margin:1px;font-size:7px;letter-spacing:1px}.clock b{font-size:13px;margin:0 5px}
+ .penalty-strips{padding:3px 7px;min-height:23px;gap:4px;font-size:10px;line-height:1.25;grid-template-columns:1fr 76px 1fr}.penalty-strips>span{font-size:6px;letter-spacing:0;text-align:center}
+ #timeout-display{font-size:10px;padding:2px}#horn-indicator{top:2px;left:44%;padding:1px 6px;font-size:9px}
+ .console-section{grid-template-rows:auto minmax(244px,1fr) 62px;gap:5px}
+ .console{min-height:244px;height:min(100%,340px)}
+ .handheld{height:60px}.handheld-case{height:56px;padding:3px 8px;gap:6px}.handheld-cord{height:24px;width:24px}.handheld-name{font-size:6px}#handheld-state{font-size:5px}
+ #mobile-actions{top:3px}.mobile-coach>small{padding-right:130px}
+}
+@media (max-width:600px) and (orientation:portrait) and (max-height:700px){
+ body{--toolbar-h:94px}
+ .mobile-coach{padding:5px;gap:3px}.mobile-coach p{font-size:11px;line-height:1.25}.mobile-coach h2{font-size:13px}.mobile-coach #mobile-feedback{font-size:10px;padding-top:3px}
+ .clock #game-time{font-size:29px}.score{font-size:26px}.board-top{padding:2px 6px}.board-main{padding:2px 6px}
+}
