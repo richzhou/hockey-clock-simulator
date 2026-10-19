@@ -124,3 +124,5 @@
 .full-game-picker{padding-bottom:7px;margin-bottom:7px}.full-game-picker #full-game-toggle{display:block;width:100%;min-height:44px;margin:0;font-weight:bold;text-align:left;background:#345b3b;color:#fff}
 
 @media (max-height:420px) and (orientation:landscape){#task-dialog{padding:8px}#task-dialog .dialog-heading{margin-bottom:4px}.full-game-picker{padding-bottom:3px;margin-bottom:3px}#task-picker #exercise-body>p{margin:4px 0}}
+
+.independent-notice{border-left:3px solid #b78b31;padding:0 0 0 10px;margin:10px 0 16px}.independent-notice h3{font-size:14px;margin:0 0 7px}.independent-notice p{font-size:12px;line-height:1.5}.independent-notice a{color:#315d3b}#unofficial-dialog{width:min(540px,calc(100vw - 20px));max-width:none;max-height:calc(100dvh - 20px);overflow:auto}#notice-acknowledge{width:100%;min-height:44px;background:#345b3b;color:#fff}.handheld-name{font-size:10px}

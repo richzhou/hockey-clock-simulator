@@ -7,7 +7,7 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
       const page = await browser.newPage({ viewport });
       const errors = [];
       page.on('pageerror', error => errors.push(error.message));
-      await page.goto(process.argv[2] || 'http://127.0.0.1:8871');
+      await page.goto(process.argv[2] || 'http://127.0.0.1:8871');if(await page.locator('#notice-acknowledge').isVisible())await page.locator('#notice-acknowledge').click();
       for (const model of ['871', 'mpc7']) {
         if (model === 'mpc7') await page.selectOption('#machine-model', model);
         const power = page.locator('.power-key');

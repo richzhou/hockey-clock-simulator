@@ -7,7 +7,7 @@ const {gameScenario}=require('./dist/full-game');
  for(const mobile of [false,true])for(const model of ['871','mpc7'])for(const assisted of [true,false]){
   const caseName=model+'-'+(assisted?'assisted':'unassisted')+'-'+(mobile?'phone':'desktop');if(process.env.FULL_GAME_CASE&&process.env.FULL_GAME_CASE!==caseName)continue;
   const context=await browser.newContext({viewport:mobile?{width:375,height:667}:{width:1440,height:1100},hasTouch:mobile,isMobile:mobile});
-  const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto(process.argv[2]||'http://127.0.0.1:8871');if(model==='mpc7')await page.selectOption('#machine-model',model);
+  const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto(process.argv[2]||'http://127.0.0.1:8871');if(await page.locator('#notice-acknowledge').isVisible())await page.locator('#notice-acknowledge').click();if(model==='mpc7')await page.selectOption('#machine-model',model);
   const coach=mobile?'.mobile-coach':'.coach';
   const action=async name=>page.locator(coach+' [data-practice="'+name+'"]').click();
   await page.locator('#task-toggle').click();if(!await page.locator('[data-practice="game-assisted"]').isVisible())await page.locator('#full-game-toggle').click();await page.locator('[data-practice="game-'+(assisted?'assisted':'unassisted')+'"]').click();

@@ -1,18 +1,24 @@
-# Hockey clock practice: Nevco 871 and MPC-7
+# Rinkside hockey practice: clocks and scorekeeping
 
-A browser-based practice simulator created for **Burnaby minor hockey volunteer scorekeepers and timekeepers**. Practice setting the clock, recording goals, entering penalties and managing period breaks before working a game. Use a mouse, touchscreen or keyboard to operate the simulated console.
+Two browser-based practice simulators created for **Burnaby minor hockey volunteer scorekeepers and timekeepers**. Clock practice covers Nevco 871 and MPC-7 controls. Scorekeeping practice rehearses a fictional electronic scoresheet based on the PCAHA Spordle Play training video. Both offer guided and full-game practice.
 
-**This is an independent, unofficial practice tool, not official training material from Burnaby Minor Hockey, the City of Burnaby or Nevco.** It supplements the current instructions and hands-on orientation provided by your association and arena. Follow your league's rules, the arena's actual console configuration and the game officials' directions.
+**This is an independent, unofficial practice tool, not affiliated with, sponsored, approved or endorsed by Spordle, Nevco, PCAHA, BC Hockey, Burnaby Minor Hockey or the City of Burnaby. It is not official training material.** It supplements the current instructions and hands-on orientation provided by your association and arena. Follow your league's rules, the arena's actual console configuration and the game officials' directions.
 
 ## Try the published app
 
-- **[Open the simulator on GitHub Pages](https://richzhou.github.io/hockey-clock-simulator/)**
+- **[Choose a practice tool on GitHub Pages](https://richzhou.github.io/hockey-clock-simulator/)**
+- [Clock practice: Nevco 871 and MPC-7](https://richzhou.github.io/hockey-clock-simulator/dist/)
+- [Scorekeeping practice: unofficial electronic scoresheet](https://richzhou.github.io/hockey-clock-simulator/scorekeeper/)
 - [Open the ChatGPT-hosted version](https://hockey-clock.chirpyvine19.chatgpt.site/)
 - [View the source on GitHub](https://github.com/richzhou/hockey-clock-simulator)
 
 Published copies can be on different versions and may lag behind the latest source in this repository.
 
-## Getting started
+## Scorekeeping practice
+
+Open **Scorekeeping practice** from the home page. After the unofficial-practice acknowledgement, use **Choose practice** to pick a full game or a focused task. Assisted mode shows steps; unassisted mode offers Help when stuck. Includes pregame checks, goals and assists, corrections, concurrent penalties, a carry-over penalty, goalie changes and practice sign-off. Everything uses fictional data in the current tab; no real login, submission or synchronization occurs. See [scorekeeping scope and reference differences](scorekeeper/README.md).
+
+## Clock practice: getting started
 
 1. Choose the arena/controller in the top bar: **Rosemary Brown Arena · Nevco 871** or **Kensington / Burnaby Lake · MPC-7 series**. The latter is a shared practice option; see the arena-identification notes below for the evidence and limitations.
 2. Open **Walkthroughs** to pick an individual task or a full-game scenario.
@@ -23,7 +29,13 @@ The full-game scenario covers a 5-minute warm-up, three 15-minute periods, 1-min
 
 ## Run locally
 
-Standalone HTML/CSS/JavaScript. Open `dist/index.html` or serve `dist/` with a static HTTP server. No other binary, database, or application packages are required.
+Standalone HTML/CSS/JavaScript. Open the root `index.html` to choose a simulator, or serve the repository root with a static HTTP server. Direct entries are `dist/index.html` for clock practice and `scorekeeper/index.html` for scorekeeping practice. Existing `/dist/` links keep working. No other binary, database, or application packages are required.
+
+## Combined repository and GitHub Pages
+
+This repository contains both apps. `index.html` is the shared home page, `dist/` is clock practice, and `scorekeeper/` is scorekeeping practice. GitHub Pages publishes `main` from `/(root)`; no build pipeline or backend is needed. Keep the directories intact when uploading the source. GitHub releases do not update the older, separate ChatGPT-hosted clock copy.
+
+Run both model suites with `node --test engine.test.js walkthroughs.test.js mpc7.test.js full-game.test.js scorekeeper.test.cjs`. Run `node scorekeeper.browser.test.cjs` for the combined home/navigation and scorekeeping browser checks, and the existing clock browser suites for clock operations.
 
 ## License
 
@@ -175,3 +187,7 @@ Manual evidence: 871 printed page 8 (PDF page 13) says each HOME/GUEST PENALTY p
 
 
 The MPC-7 “Edit a penalty’s time and player” walkthrough explains confirmation at each field: YES retains the existing player or time, while a complete replacement advances automatically. The exercise deliberately changes both fields (12 → 18, 2:00 → 1:30), so it does not insert an extra YES. For a time-only correction, retain the player with YES before entering M SS. This follows the manufacturer’s edit sequence on printed page 17.
+
+## Independent practice interface
+
+This is not an official Nevco product or training course. It is not affiliated with, sponsored, approved or endorsed by Nevco, Burnaby Minor Hockey, PCAHA, BC Hockey or the City of Burnaby. No real hardware or game is controlled. The app uses original practice screens without manufacturer logos or copied console images; model names are references only. Follow current manufacturer manuals, arena orientation and game officials for final guidance. A practice-only acknowledgement appears once per tab, and the Unofficial button reopens the limitations and official manual links.

@@ -23,7 +23,7 @@ async function main(){
  const context=await browser.newContext({viewport:{width:1440,height:1100},reducedMotion:'reduce'});
  if(config.bearer){const origin=new URL(baseURL).origin;await context.route(origin+'/**',route=>route.continue({headers:{...route.request().headers(),'OAI-Sites-Authorization':'Bearer '+config.bearer}}));}
  page=await context.newPage();page.setDefaultTimeout(8000);page.on('pageerror',err=>errors.push(err.message));page.on('crash',()=>errors.push('Browser page crashed'));
- await page.goto(baseURL,{waitUntil:'networkidle',timeout:25000});await text('h1','Your seat at the scorer’s table.');
+ await page.goto(baseURL,{waitUntil:'networkidle',timeout:25000});if(await page.locator('#notice-acknowledge').isVisible())await page.locator('#notice-acknowledge').click();await text('h1','Your seat at the scorer’s table.');
  if(!process.env.NEVCO_MOBILE_ONLY){
  assert.equal(await page.locator('#exercise option').count(),Object.keys(tasks).length+1);pass('Page loads, '+Object.keys(tasks).length+' task options and free practice');
  for(const [id,task]of Object.entries(tasks)){
@@ -71,7 +71,7 @@ async function main(){
  const touchContext=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,deviceScaleFactor:3});
  if(config.bearer){const origin=new URL(baseURL).origin;await touchContext.route(origin+'/**',route=>route.continue({headers:{...route.request().headers(),'OAI-Sites-Authorization':'Bearer '+config.bearer}}));}
  const desktopPage=page;page=await touchContext.newPage();page.on('pageerror',err=>errors.push(err.message));
- await page.goto(baseURL,{waitUntil:'networkidle'});
+ await page.goto(baseURL,{waitUntil:'networkidle'});if(await page.locator('#notice-acknowledge').isVisible())await page.locator('#notice-acknowledge').click();
  assert.equal(await page.locator('#machine-model option').count(),2);await text('#machine-model option[value="871"]','Rosemary Brown Arena · Nevco 871');await page.selectOption('#machine-model','871');
  assert.equal(await page.locator('.orientation-reminder').count(),0);
  await start('score');await page.locator('[data-key="home-goal"]').tap();await text('#mobile-feedback',/Pressed HOME GOAL/);await text('#mobile-next','Tap HOME SCORE');
@@ -146,7 +146,7 @@ async function main(){
  pass('Switching models clears the sample game and restores the correct keypad, tasks and 871 time/period behavior');
  const mpcTouch=await browser.newContext({viewport:{width:667,height:320},isMobile:true,hasTouch:true});
  if(config.bearer){const origin=new URL(baseURL).origin;await mpcTouch.route(origin+'/**',route=>route.continue({headers:{...route.request().headers(),'OAI-Sites-Authorization':'Bearer '+config.bearer}}));}
- page=await mpcTouch.newPage();page.on('pageerror',err=>errors.push(err.message));await page.goto(baseURL,{waitUntil:'networkidle'});await page.selectOption('#machine-model','mpc7');
+ page=await mpcTouch.newPage();page.on('pageerror',err=>errors.push(err.message));await page.goto(baseURL,{waitUntil:'networkidle'});if(await page.locator('#notice-acknowledge').isVisible())await page.locator('#notice-acknowledge').click();await page.selectOption('#machine-model','mpc7');
  for(const size of [{width:844,height:390},{width:667,height:320},{width:390,height:844}]){
   await page.setViewportSize(size);await start('custom');await page.locator('[data-key=guest-new-minor]').tap();
   await page.locator('[data-key="9"]').tap();await text('#mobile-feedback',/Pressed 9/);await text('#mobile-next','Tap 1');
