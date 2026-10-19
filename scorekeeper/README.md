@@ -12,6 +12,8 @@ An independent, mobile-friendly practice simulator for Burnaby minor hockey volu
 
 Open `scorekeeper/index.html` from the combined repository in a browser. It is a buildless HTML/CSS/JavaScript app. No account, database or application packages are needed. Everything is fictional and stays in the tab; closing or reloading resets the exercise. Do not enter real player data, credentials, signatures or team identifiers.
 
+The app fills the viewport, with no branding header or disclaimer footer. **← Home** returns to the shared tool picker. The initial acknowledgement and **About** keep limitations and official-help links available. The coach stays visible while the scoresheet scrolls independently.
+
 Choose **Choose practice** for a full game or a focused task. Assisted mode shows instructions. Unassisted mode shows events and offers Help. An incorrect saved answer explains what to fix and leaves the form open without changing the practice sheet.
 
 The full game contains pregame checks, three periods, goals and assists, a corrected scorer, a power-play penalty release, concurrent penalties, a carry-over penalty, a goalie change, period-length correction, bench penalty, optional shots/notes and final sign-off. Period lengths and game events are sample exercises, not league rules. There is no running arena clock or automatic penalty/manpower decision.
