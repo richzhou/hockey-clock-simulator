@@ -121,4 +121,6 @@
 .full-game-picker{border-bottom:1px solid #c3cbb8;margin-bottom:14px;padding-bottom:12px}.full-game-picker h3{margin:2px 0 6px;font-size:17px}.full-game-picker p{font-size:12px;line-height:1.4;margin:6px 0}.full-game-picker button,.full-game-actions button{min-height:36px;border:1px solid #687e52;background:#f2f6e9;border-radius:4px;padding:6px 9px;color:#30472c;margin:3px;font-size:12px}.full-game-picker button:first-of-type{background:#345b3b;color:white}.full-game-actions{display:flex;flex-wrap:wrap}.full-game-feedback{flex-basis:100%;font-size:12px;margin:0}
 @media (max-width:600px) and (orientation:portrait){#mobile-actions[data-full-game]{position:static;justify-content:flex-end;padding:0;margin:0}.mobile-coach:has([data-full-game])>small{padding-right:0}.mobile-coach:has([data-full-game]) #mobile-feedback{font-size:10px}.mobile-coach:has([data-full-game]) p{font-size:10px;line-height:1.2}.mobile-coach:has([data-full-game]) h2{font-size:12px}}
 
-.full-game-picker summary{cursor:pointer;font-weight:bold;font-size:12px;padding:5px 0}.full-game-picker:not([open]){padding-bottom:4px;margin-bottom:7px}
+.full-game-picker{padding-bottom:7px;margin-bottom:7px}.full-game-picker #full-game-toggle{display:block;width:100%;min-height:44px;margin:0;font-weight:bold;text-align:left;background:#345b3b;color:#fff}
+
+@media (max-height:420px) and (orientation:landscape){#task-dialog{padding:8px}#task-dialog .dialog-heading{margin-bottom:4px}.full-game-picker{padding-bottom:3px;margin-bottom:3px}#task-picker #exercise-body>p{margin:4px 0}}

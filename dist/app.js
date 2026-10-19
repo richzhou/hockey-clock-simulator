@@ -91,7 +91,8 @@ document.addEventListener('keydown',e=>{if(['SELECT','INPUT','TEXTAREA','BUTTON'
 const mobileLayout=window.matchMedia('(max-width:800px), (max-width:1000px) and (max-height:600px)');
 const taskCard=document.querySelector('.practice-card');$('task-picker').append(taskCard);
 const toolsHome=document.createElement('div');document.querySelector('.under-console').before(toolsHome);const referenceHome=document.createElement('div');$('reference').before(referenceHome);
-function openTaskPicker(){if(practice.task&&!practice.fullGame)$('exercise').value=practice.id;guideSignature='';render();$('task-dialog').showModal();}
+function openTaskPicker(){$('full-game-options').hidden=true;$('full-game-toggle').setAttribute('aria-expanded','false');if(practice.task&&!practice.fullGame)$('exercise').value=practice.id;guideSignature='';render();$('task-dialog').showModal();}
+$('full-game-toggle').onclick=()=>{const expanded=$('full-game-options').hidden;$('full-game-options').hidden=!expanded;$('full-game-toggle').setAttribute('aria-expanded',String(expanded));};
 $('task-toggle').onclick=openTaskPicker;$('task-close').onclick=()=>$('task-dialog').close();
 $('tools-toggle').onclick=()=>{$('tools-content').append(document.querySelector('.under-console'),$('reference'));$('tools-dialog').showModal();};
 $('tools-close').onclick=()=>$('tools-dialog').close();

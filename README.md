@@ -31,7 +31,7 @@ The simulator's original code and documentation are available under the [MIT Lic
 
 ## Full game training
 
-Open **Walkthroughs**, then choose **Start assisted game** or **Start unassisted game**. Both models use one continuous sample game: a 5-minute warm-up, three 15-minute periods, two 1-minute intermissions, goals, concurrent minors on one team, penalties on both teams, selection and removal of the instructed second penalty, and penalties carried across both period boundaries. The final score is Home 3, Guest 1.
+Open **Walkthroughs**, press the **Full game training** button, then choose **Start assisted game** or **Start unassisted game**. Both models use one continuous sample game: a 5-minute warm-up, three 15-minute periods, two 1-minute intermissions, goals, concurrent minors on one team, penalties on both teams, selection and removal of the instructed second penalty, and penalties carried across both period boundaries. The final score is Home 3, Guest 1.
 
 Assisted mode lists the remaining keys and highlights the next control. Unassisted mode gives event cues without key instructions or highlights; **Help** reveals assistance for that event only. The completion screen reports mistakes and help requests. A wrong key names the mistaken key and the correct next control. Full-game training restores the console to the state immediately before that key, preserving correct digits and earlier game progress, so the user can continue directly. This coaching recovery also reveals the current guidance in unassisted mode until the next correct key. Free practice and the short walkthroughs retain normal console behavior. **Retry event** remains available for an unexpected result mismatch.
 

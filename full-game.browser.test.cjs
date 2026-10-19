@@ -10,7 +10,7 @@ const {gameScenario}=require('./dist/full-game');
   const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto(process.argv[2]||'http://127.0.0.1:8871');if(model==='mpc7')await page.selectOption('#machine-model',model);
   const coach=mobile?'.mobile-coach':'.coach';
   const action=async name=>page.locator(coach+' [data-practice="'+name+'"]').click();
-  await page.locator('#task-toggle').click();if(!await page.locator('[data-practice="game-assisted"]').isVisible())await page.locator('.full-game-picker summary').click();await page.locator('[data-practice="game-'+(assisted?'assisted':'unassisted')+'"]').click();
+  await page.locator('#task-toggle').click();if(!await page.locator('[data-practice="game-assisted"]').isVisible())await page.locator('#full-game-toggle').click();await page.locator('[data-practice="game-'+(assisted?'assisted':'unassisted')+'"]').click();
   assert.equal(await page.locator('.next-key').count(),assisted?1:0);
   if(!assisted){assert.doesNotMatch(await page.locator('#mobile-instruction').textContent(),/Next:|SET →/);await action('game-help');assert.match(await page.locator('#mobile-instruction').textContent(),/Next: SET/);assert.equal(await page.locator('.next-key').count(),1);}
   // Wrong keys identify the mistake and restore input without a retry.
@@ -28,7 +28,7 @@ const {gameScenario}=require('./dist/full-game');
   assert.equal(await page.evaluate(()=>practice.completed),true);assert.equal(await page.locator('#home-score').textContent(),'3');assert.equal(await page.locator('#guest-score').textContent(),'1');assert.equal(await page.locator('#period').textContent(),'3');assert.equal(await page.evaluate(()=>game.running),false);assert.deepEqual(errors,[]);
   await page.screenshot({path:'/private/tmp/full-game-'+model+'-'+(assisted?'assisted':'unassisted')+'.png'});
   await page.locator('#task-toggle').click();await page.selectOption('#exercise',model==='871'?'score':'home-score');await page.locator('[data-practice="start"]').click();assert.equal(await page.evaluate(()=>!!practice.fullGame),false);
-  await page.locator('#task-toggle').click();if(!await page.locator('[data-practice="game-assisted"]').isVisible())await page.locator('.full-game-picker summary').click();await page.locator('[data-practice="game-unassisted"]').click();await page.locator(coach+' [data-practice="game-help"]').waitFor({state:'visible'});
+  await page.locator('#task-toggle').click();if(!await page.locator('[data-practice="game-assisted"]').isVisible())await page.locator('#full-game-toggle').click();await page.locator('[data-practice="game-unassisted"]').click();await page.locator(coach+' [data-practice="game-help"]').waitFor({state:'visible'});
   console.log('PASS '+model+' '+(assisted?'assisted':'unassisted')+' '+(mobile?'phone':'desktop')+': '+steps.length+' events, help, recovery, mobile fit, final score, return to walkthrough');await context.close();
  }
  }finally{await browser.close();}
