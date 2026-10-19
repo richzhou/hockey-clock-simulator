@@ -64,6 +64,10 @@ The official help page exposes full-resolution screenshot attachments. These wer
 
 The follow-up passed all 44 local scenario runs, detailed control checks on desktop and phone, and 161 combined model tests. Focused checks cover actual-start validation, Previous, elapsed chronology, separate infraction selection/cancellation, goalie masks, review correction/deletion, Back and sign-off invalidation, and contextual Help after Back. Penalty menus were cross-checked against the relevant Hockey Canada 2026–28 rule subsections; the referee still supplies the actual assessment. These checks verify the implemented exercises, not every official screen, regional setting or current live-app version.
 
+## Published follow-up verification
+
+GitHub Pages successfully deployed application commit `e7b7241`. Playwright then passed the detailed control suite on desktop and phone and 24 public scenario runs: full game, pregame, Major, Match, goalie and wrap-up, each assisted/unassisted on both viewport types. Shared navigation at 320, 375 and 1440px and both clock-model smoke checks also passed. The navigation test now waits for the clock page to finish loading before checking its opening acknowledgement; the initial public attempt exposed a test timing race, not a simulator failure.
+
 ## Repeat the checks
 
 Run `node --test engine.test.js walkthroughs.test.js mpc7.test.js full-game.test.js scorekeeper.test.cjs`.
