@@ -14,6 +14,8 @@ Open `scorekeeper/index.html` from the combined repository in a browser. It is a
 
 The app fills the viewport, with no branding header or disclaimer footer. **← Home** returns to the shared tool picker. The initial acknowledgement and **About** keep limitations and official-help links available. The coach stays visible while the scoresheet scrolls independently.
 
+The sample team has 16 fictional players in total: 14 skaters plus two goalies. This is a practice roster, not a claim about league roster limits. Pregame attendance selections control which skaters appear in goal and penalty pickers. The charcoal panels, blue action buttons, dark entry dialogs and green/yellow/white player selections follow the app shown in the supplied training video; the simulator retains its own name and disclaimer.
+
 Choose **Choose practice** for a full game or a focused task. Assisted mode shows instructions. Unassisted mode shows events and offers Help. An incorrect saved answer explains what to fix and leaves the form open without changing the practice sheet.
 
 The full game contains pregame checks, three periods, goals and assists, a corrected scorer, a power-play penalty release, concurrent penalties, a carry-over penalty, a goalie change, period-length correction, bench penalty, optional shots/notes and final sign-off. Period lengths and game events are sample exercises, not league rules. There is no running arena clock or automatic penalty/manpower decision.

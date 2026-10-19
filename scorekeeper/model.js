@@ -1,13 +1,13 @@
 (function(root){
 'use strict';
-const roster=[{n:4,name:'Avery'},{n:7,name:'Blake'},{n:9,name:'Casey'},{n:12,name:'Drew'},{n:16,name:'Ellis'},{n:18,name:'Finley'}];
+const roster=[{n:2,name:'Gray'},{n:3,name:'Harper'},{n:4,name:'Avery'},{n:5,name:'Indigo'},{n:6,name:'Jordan'},{n:7,name:'Blake'},{n:8,name:'Kai'},{n:9,name:'Casey'},{n:10,name:'Lane'},{n:11,name:'Micah'},{n:12,name:'Drew'},{n:14,name:'Noel'},{n:16,name:'Ellis'},{n:18,name:'Finley'}];
 const catalog=[
  ['4.3','Bench minor','Bench'],['7.1','Attempt to injure','Physical'],['7.2','Boarding','Physical'],['7.3','Body-checking','Physical'],['7.4','Charging','Physical'],['7.5','Checking from behind','Physical'],['7.6','Head contact (7.6)','Physical'],['7.8','Kneeing','Physical'],['7.9','Roughing','Physical'],['7.10','Fighting','Physical'],['7.11','Instigator / aggressor','Physical'],
  ['8.1','Holding','Restraining'],['8.2','Hooking','Restraining'],['8.3','Interference','Restraining'],['8.4','Interference from bench','Restraining'],['8.5','Goaltender interference','Restraining'],['8.6','Tripping','Restraining'],['8.7','Clipping','Restraining'],['8.8','Slew-footing','Restraining'],
  ['9.1','Butt-ending','Stick'],['9.2','Cross-checking','Stick'],['9.3','Slashing','Stick'],['9.4','Spearing','Stick'],['10.1','Delay of game','Other'],['10.2','Handling / falling on puck','Other'],['10.3','Diving / embellishment','Other'],['10.4','Leaving bench','Other'],['10.5','Throwing stick / object','Other'],['10.6','Illegal equipment','Other'],['10.7','Too many players','Other'],['10.8','Refusing to start play','Other'],['11.1','Unsportsmanlike conduct','Conduct'],['11.2','Abusive behaviour','Conduct'],['11.3','Spitting','Conduct'],['11.4','Discrimination','Conduct'],['11.5','Physical harassment of officials','Conduct']
 ].map(([code,name,section])=>({code,name,section}));
 const severities={minor:{label:'Minor',minutes:2},double:{label:'Double minor',minutes:4},major:{label:'Major + Game Misconduct',minutes:5,ejection:'Game misconduct'},match:{label:'Match',minutes:5,ejection:'Match'},misconduct:{label:'Misconduct',minutes:10},game:{label:'Game Misconduct',minutes:0,ejection:'Game misconduct'}};
-const defaultLineup=()=>({players:[4,7,9,12,16,18,1,30],bench:['coach','assistant'],signature:'',startingGoalie:1});
+const defaultLineup=()=>({players:[...roster.map(p=>p.n),1,30],bench:['coach','assistant'],signature:'',startingGoalie:1});
 const emptyShots=()=>({home:{1:[0,0,0],30:[0,0,0]},away:{1:[0,0,0],30:[0,0,0]}});
 const clone=x=>JSON.parse(JSON.stringify(x));
 function initial(){return {stage:'login',ready:{home:false,away:false,staff:false,officials:false},staff:{scorekeeper:'',timekeeper:''},periods:[15,15,15],entry:'remaining',events:[],nextId:1,goalies:{home:1,away:1},notes:'',shots:emptyShots(),lineups:{home:defaultLineup(),away:defaultLineup()},officials:[{role:'Referee',name:'Morgan',noShow:false},{role:'Linesperson',name:'Riley',noShow:false}],checked:[],signatures:{},actualStart:'18:00',actualEnd:'19:10'};}
