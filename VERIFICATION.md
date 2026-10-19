@@ -75,3 +75,9 @@ Run `node --test engine.test.js walkthroughs.test.js mpc7.test.js full-game.test
 With Playwright available, run `node scorekeeper.browser.test.cjs` and `node scorekeeper-controls.browser.test.cjs`. Set `PLAYWRIGHT_MODULE` when using an existing module outside the repository. `SIMULATOR_BASE_URL=https://richzhou.github.io/hockey-clock-simulator` targets the combined public site. `SCOREKEEPER_VIEW=desktop` or `phone` splits the matrix; `SCOREKEEPER_TASKS=major,match` selects specific scenarios for retesting.
 
 Serve the repository locally, then point `browser.test.cjs`, `full-game.browser.test.cjs`, `portrait.browser.test.cjs` and `power.browser.test.cjs` at its `/dist/` URL. The ordinary clock browser suite accepts empty stdin; no account token is needed for GitHub Pages or loopback.
+
+## Compact practice menu: 19 October 2026
+
+After a successful demo login, or when opening a task that starts in-game, the practice controls and coach collapse into one row. Its toggle restores Home, Choose practice, About and guidance without changing the game. Help, error feedback and the simulated-sync action remain accessible while compact; successful-save notices do not consume extra space. The toggle displays the current task step or completion.
+
+Passed 161 model checks, the detailed desktop/phone control suite, and full-game/wrap-up runs in assisted and unassisted modes on both screen sizes (8 runs). Browser checks confirm automatic collapse below 60px, expand/collapse without state changes, visible Help, wrong-entry recovery and completion through sync. The phone layout was inspected visually. Both clock models and shared navigation smoke checks passed.

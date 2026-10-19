@@ -12,7 +12,7 @@ An independent, mobile-friendly practice simulator for Burnaby minor hockey volu
 
 Open `scorekeeper/index.html` from the combined repository in a browser. It is a buildless HTML/CSS/JavaScript app. No account, database or application packages are needed. Everything is fictional and stays in the tab; closing or reloading resets the exercise. Do not enter real player data, credentials, signatures or team identifiers.
 
-The app fills the viewport, with no branding header or disclaimer footer. **← Home** returns to the shared tool picker. The initial acknowledgement and **About** keep limitations and official-help links available. The coach stays visible while the scoresheet scrolls independently.
+The app fills the viewport, with no branding header or disclaimer footer. **← Home** returns to the shared tool picker. The initial acknowledgement and **About** keep limitations and official-help links available. After demo login, the practice menu and coach collapse into a compact row so the scoresheet has more room. Expand the practice control to see Home, Choose practice, About and full guidance; collapse it again when ready. Help and mistake feedback remain accessible, and simulated sync stays available while compact. The scoresheet scrolls independently.
 
 The sample team has 16 fictional players in total: 14 skaters plus two goalies. This is a practice roster, not a claim about league roster limits. Pregame attendance selections control which skaters appear in goal and penalty pickers. The charcoal panels, blue action buttons, dark entry dialogs and green/yellow/white player selections follow the app shown in the supplied training video; the simulator retains its own name and disclaimer.
 
