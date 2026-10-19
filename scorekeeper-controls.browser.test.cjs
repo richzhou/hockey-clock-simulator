@@ -5,6 +5,18 @@ const server=http.createServer((req,res)=>{let route;try{route=decodeURIComponen
 (async()=>{await new Promise(r=>server.listen(0,'127.0.0.1',r));const url='http://127.0.0.1:'+server.address().port;const browser=await chromium.launch({channel:'chrome',headless:true});try{
 for(const mobile of [false,true]){
  const c=await browser.newContext({viewport:mobile?{width:375,height:667}:{width:1440,height:1000}}),p=await c.newPage(),errors=[];p.on('pageerror',e=>errors.push(e.message));await p.goto(url+'/scorekeeper/');await p.locator('#acknowledge').click();const dlg=p.locator('#entry-dialog'),save=()=>dlg.locator('button[type=submit]').click();
+ // Pregame lookup: typing is insufficient; both saved selections and Done are required.
+ await p.locator('#choose-task').click();await p.locator('#free-practice').click();await p.locator('#login-form button[type=submit]').click();
+ assert.equal(await p.locator('[data-action="start"]').isDisabled(),true);
+ await p.locator('[data-action="staff"]').click();assert.equal(await dlg.locator('button[type=submit]').isDisabled(),true);
+ await dlg.getByRole('button',{name:'Edit Scorekeeper',exact:true}).click();await dlg.locator('#staff-query').fill('999999');assert.equal(await dlg.locator('[role=option]').count(),0);assert.equal(await dlg.locator('#save-staff').isDisabled(),true);
+ await dlg.locator('#staff-query').fill('DEMO-HCR-101');await dlg.locator('#staff-query').press('ArrowDown');await dlg.locator('#staff-query').press('Enter');await dlg.locator('#staff-query').press('ArrowDown');await dlg.locator('#save-staff').click();assert.equal(await dlg.locator('button[type=submit]').isDisabled(),true);
+ await dlg.getByRole('button',{name:'Edit Timekeeper',exact:true}).click();await dlg.locator('#staff-query').fill('Sam');assert.equal(await dlg.locator('#save-staff').isDisabled(),true);await dlg.locator('[data-staff-result="volunteer:Sam"]').click();await dlg.locator('#save-staff').click();await save();assert.equal(await p.evaluate(()=>state.ready.staff),true);assert.equal(await p.locator('[data-action="start"]').isDisabled(),true);
+ await p.locator('[data-action="staff"]').click();await dlg.getByRole('button',{name:'Edit Scorekeeper',exact:true}).click();await dlg.locator('#staff-query').fill('Riley');await dlg.locator('#discard-staff').click();assert.equal(await p.evaluate(()=>state.staff.scorekeeper),'Alex');
+ await dlg.getByRole('button',{name:'Edit Timekeeper',exact:true}).click();await dlg.locator('#remove-staff').click();assert.equal(await p.evaluate(()=>state.ready.staff),false);assert.equal(await dlg.locator('button[type=submit]').isDisabled(),true);
+ await dlg.getByRole('button',{name:'Edit Timekeeper',exact:true}).click();await dlg.locator('#staff-query').fill('Sam');await dlg.locator('[data-staff-result="volunteer:Sam"]').click();await dlg.locator('#save-staff').click();await save();
+ await p.screenshot({path:'/private/tmp/scorekeeper-pregame-'+(mobile?'phone':'desktop')+'.png',fullPage:true});
+ console.log('PASS pregame '+(mobile?'phone':'desktop')+': HCR keyboard lookup, volunteer selection, incomplete start, discard and reassignment');
  async function choose(task){await p.locator('#choose-task').click();await p.locator('[data-task="'+task+'"]').click();}
  async function clock(period,time){await dlg.locator('#period').selectOption(String(period));await dlg.locator('#time').fill(time);}
  async function selectInfraction(name,severity){await dlg.locator('#choose-infraction').click();await dlg.locator('[data-infraction="'+name+'"]').click();await dlg.locator('#penalty-severity').selectOption(severity);await dlg.locator('#infraction-next').click();}
