@@ -6,7 +6,7 @@ A browser-based practice simulator created for **Burnaby minor hockey volunteer 
 
 ## Try the published app
 
-- **[Open the simulator on GitHub Pages](https://richzhou.github.io/hockey-clock-simulator/dist/)**
+- **[Open the simulator on GitHub Pages](https://richzhou.github.io/hockey-clock-simulator/)**
 - [Open the ChatGPT-hosted version](https://hockey-clock.chirpyvine19.chatgpt.site/)
 - [View the source on GitHub](https://github.com/richzhou/hockey-clock-simulator)
 
