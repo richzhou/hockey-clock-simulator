@@ -23,10 +23,10 @@ case 'periods':await open('periods');for(let n=1;n<=3;n++)await dialog.locator('
 case 'shots':await open('options');await dialog.locator('[data-action="shots"]').click();for(const t of ['home','away'])for(const n of [1,30])for(let period=1;period<=3;period++)await dialog.locator('#shots-'+t+'-'+n+'-'+period).fill(String(d.shots[t][n][period-1]));await save();break;
 case 'notes':await open('options');await dialog.locator('[data-action="notes"]').click();await dialog.locator('#notes').fill(d.notes);await save();break;
 case 'begin-wrap':await open('begin-wrap');break;
-case 'sign':for(const k of ['scorekeeper','timekeeper'])await p.locator('#'+k).fill(d[k]);await p.locator('#wrap-form button[type=submit]').click();break;
-case 'review':await p.locator('#checked').check();for(const k of ['scorekeeper','timekeeper'])await p.locator('#'+k).fill(d[k]);await p.locator('#wrap-form button[type=submit]').click();break;
+case 'sign':for(const k of ['scorekeeper','timekeeper'])await p.locator('#'+k).fill(d[k]);await p.locator('#wrap-form button[type=submit], #wrap-next').click();break;
+case 'review':await p.locator('#checked').check();for(const k of ['scorekeeper','timekeeper'])await p.locator('#'+k).fill(d[k]);await p.locator('#wrap-form button[type=submit], #wrap-next').click();break;
 case 'official-sign':await p.locator('#official').fill(d.official);await p.getByRole('button',{name:'Done',exact:true}).click();break;
-case 'submit':await p.locator('#wrap-form button[type=submit]').click();break;
+case 'submit':await p.locator('#wrap-form button[type=submit], #wrap-next').click();break;
 case 'sync':await open('sync');break;
 case 'finish':await open('finish');break;
 case 'end':if(!await dialog.isVisible())await open('end');await fillClock(d);await dialog.locator('#actualStart').fill(d.actualStart);await dialog.locator('#actualEnd').fill(d.actualEnd);await mistake([['actualEnd','19:11']],save);await save();break;

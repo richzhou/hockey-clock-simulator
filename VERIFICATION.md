@@ -110,3 +110,11 @@ Passed 163 model checks, all 44 desktop/phone scenario runs in both assistance m
 ## Full keyboard for game times: 19 October 2026
 
 Removed the simulator-specific colon button at the user’s request. All shared game-clock fields now use text input mode instead of a numeric-only keypad; users enter 3:00 or 03:00 directly. The focused mobile suite checks the text keyboard request, absence of separator controls, direct colon typing, saves and draft preservation. This supersedes the colon-button workaround described in the preceding historical audit.
+
+## Mobile End Game and sign-off: 19 October 2026
+
+Compared official [End Game](https://help.spordle.com/download/attachments/3489202177/Scorekeeper%2099.png), [Review Game](https://help.spordle.com/download/attachments/3489202177/Scorekeeper%20A.png), [Game Officials](https://help.spordle.com/download/attachments/3489202177/Scorekeeper%20B.png), [Submit](https://help.spordle.com/download/attachments/3489202177/Scorekeeper%20C.png) and [Sync](https://help.spordle.com/download/attachments/3489202177/Scorekeeper%20D.png) screenshots.
+
+Next and Done moved from the bottom of the page into the sticky top bar, alongside Back. Review Game and Game Officials have distinct stage indicators; every wrap-up stage now has an accurate header. Final clock and actual start/end are grouped into panels. Actual times use full-keyboard HH:MM text fields, retaining existing validation, because a native time picker could render AM/PM despite a 24-hour label. Submit and Sync panels share the guide palette; completed Sync has disabled Back and a right-aligned Finish.
+
+The focused suite completes final times through Finish at 320, 375, 430 and 768px, checks top-action position while scrolling, required initials, Back clearing sign-off, re-review, Help during sync and no horizontal overflow. Full-game and wrap-up exercises pass in assisted/unassisted modes on desktop and phone (8 runs), along with 163 model checks and the detailed control suite. Mobile screenshots were visually inspected. The source screenshots are wide views; the phone arrangement is an adaptation. Fictional typed initials are retained; optional Add Email, real Game Report, real signatures and transmission remain outside scope.
