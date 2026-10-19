@@ -106,3 +106,7 @@ Compared the official guide’s [goal](https://help.spordle.com/download/attachm
 - Active penalties show serving-player jerseys, grouped Away/Home. Only unresolved timed entries appear; no countdown or automatic release is inferred. Penalty details show end time first, offender, serving player, assessment, Edit and End. Ending a selected concurrent penalty removes only its jersey and retains its history; ended records offer Edit end. Record rows use the guide’s white/blue presentation.
 
 Passed 163 model checks, all 44 desktop/phone scenario runs in both assistance modes, and the detailed control suite. A focused browser suite at 320, 375, 430 and 768px verifies entry panel geometry, palette, labelled toolbar controls, goal/penalty/goalie saves, Help draft preservation, typing 03 then the colon control then 00, duplicate-colon prevention, serving-player identity and independent concurrent releases. Screenshots were visually inspected. The focused suite also accepts SIMULATOR_BASE_URL for public deployment checks.
+
+## Full keyboard for game times: 19 October 2026
+
+Removed the simulator-specific colon button at the user’s request. All shared game-clock fields now use text input mode instead of a numeric-only keypad; users enter 3:00 or 03:00 directly. The focused mobile suite checks the text keyboard request, absence of separator controls, direct colon typing, saves and draft preservation. This supersedes the colon-button workaround described in the preceding historical audit.
