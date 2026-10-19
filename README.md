@@ -35,7 +35,7 @@ Standalone HTML/CSS/JavaScript. Open the root `index.html` to choose a simulator
 
 This repository contains both apps. `index.html` is the shared home page, `dist/` is clock practice, and `scorekeeper/` is scorekeeping practice. GitHub Pages publishes `main` from `/(root)`; no build pipeline or backend is needed. Keep the directories intact when uploading the source. GitHub releases do not update the older, separate ChatGPT-hosted clock copy.
 
-Run both model suites with `node --test engine.test.js walkthroughs.test.js mpc7.test.js full-game.test.js scorekeeper.test.cjs`. Run `node scorekeeper.browser.test.cjs` for the combined home/navigation and scorekeeping browser checks, and the existing clock browser suites for clock operations.
+Run both model suites with `node --test engine.test.js walkthroughs.test.js mpc7.test.js full-game.test.js scorekeeper.test.cjs`. Run `node scorekeeper.browser.test.cjs` for the combined home/navigation and scorekeeping browser checks, `node scorekeeper-controls.browser.test.cjs` for the detailed scorekeeper controls and editing regressions, and the existing clock browser suites for clock operations.
 
 ## License
 

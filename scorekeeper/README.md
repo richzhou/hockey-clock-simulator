@@ -22,9 +22,13 @@ Primary visual reference: [PCAHA 2026–27 scorekeeper training video](https://p
 
 Cross-reference: [official Spordle scorekeeper help](https://help.spordle.com/space/PLD/3489202177/Scorekeeper+guide) and [PCAHA manager resources](https://pcaha.ca/resources/team-managers/).
 
-The video’s final workflow is sign-off, officials review, submission, sync and final End Game fields. The general help page describes a different order. This simulator follows the video’s sequence, with an original practice wrap-up navigation; it does not claim to reproduce the current app exactly. The video recommends recording required shots by goalie on paper and using Notes. A separate simplified totals form is included for practice; confirm the real procedure with your league.
+The wrap-up now follows the written Spordle guide: final clock and actual start/end times, review with off-ice initials, game officials’ review/initials and Done, Submit, then sync and Finish. The supplied PCAHA video presents a different sequence. The simulator states this conflict rather than treating either source as proof of the current live app. Confirm the procedure used by your league. Simulated sync is advanced using a control outside the fictional app; no real submission occurs.
 
-Penalty Off Time and Start Time are separate. A carry-over is one record across periods. Concurrent penalties are entered separately; the official decides offsets and releases. Common practice infractions only; Head Contact uses the video’s minor-hockey reference (7.6), with no Junior/Senior-only choices. Major/match ejections, every infraction code, eligibility, real offline synchronization and live submission are outside this simulator.
+The Start Game wizard has separate period-length and time-entry screens with Next before Remaining Time / Start. Roster practice walks through players, bench staff and fictional coach confirmation. Actual PCAHA rosters remain the team manager’s responsibility. Game Officials supports name corrections, Did not show / Remove and a temporary fictional replacement. Pregame details can be revisited during free practice.
+
+Goalie controls use Swap, Pull and Return. Current goalie is recalculated from the timeline when an earlier change is edited or deleted. Shots are recorded against each goalie in each period and summed for the opposing shooting team. The guide counts shots, not saves. The PCAHA video’s alternative paper/Notes instruction remains linked. Only track shots when your league requires them.
+
+Penalty Start Time follows Off Time until manually changed. Ended penalties retain their end when edited; an edit that would place the start after the recorded end is rejected. Opportunities can be entered as 0–2 for these exercises. By-code and by-section search covers the minor-hockey rule headings in [Hockey Canada’s 2026–28 rulebook](https://www.hockeycanada.ca/en-ca/hockey-programs/officiating/downloads), not a proprietary regional Spordle code database. Junior/Senior-only choices are excluded. Major includes Game Misconduct, and Major/Match require a different serving skater. Dedicated exercises cover those selections. The referee supplies the assessment and release: this is not a penalty-rules or eligibility engine. Every regional code, combined charge, overtime/shootout scenario, real offline sync and live submission remain outside this simulator.
 
 The screens, styling and implementation are original. No Spordle logos, proprietary source, screenshot assets, video footage or real rosters are included. Third-party names and linked materials belong to their owners. MIT applies only to the original project code; linked reference material is not relicensed.
 
@@ -32,6 +36,6 @@ The screens, styling and implementation are original. No Spordle logos, propriet
 
 From the repository root: `node --test scorekeeper.test.cjs`
 
-`node scorekeeper.browser.test.cjs` uses Playwright and installed Chrome. Set `PLAYWRIGHT_MODULE` to the module path if it is not installed normally. It serves this repository on loopback and tests the home page and both simulators.
+`node scorekeeper.browser.test.cjs` uses Playwright and installed Chrome. Set `PLAYWRIGHT_MODULE` to the module path if it is not installed normally. It serves this repository on loopback and tests the home page and both simulators. `node scorekeeper-controls.browser.test.cjs` covers Major/Match entries, rule search, the editable Start Time, preserving penalty ends, historical goalie corrections, Pull/Return and no-show replacement on phone and desktop.
 
 Both simulators are published together through the hockey-clock-simulator GitHub repository. It has no connection to VersaCloudERP, even when stored beside that checkout locally.
