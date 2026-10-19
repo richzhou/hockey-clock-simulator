@@ -1,10 +1,43 @@
 # Hockey clock practice: Nevco 871 and MPC-7
 
-Standalone HTML/CSS/JavaScript. Open `dist/index.html` or serve `dist/` with a static HTTP server. No other binary, database, or application packages are required. 
+A browser-based practice simulator created for **Burnaby minor hockey volunteer scorekeepers and timekeepers**. Practice setting the clock, recording goals, entering penalties and managing period breaks before working a game. Use a mouse, touchscreen or keyboard to operate the simulated console.
+
+**This is an independent, unofficial practice tool, not official training material from Burnaby Minor Hockey, the City of Burnaby or Nevco.** It supplements the current instructions and hands-on orientation provided by your association and arena. Follow your league's rules, the arena's actual console configuration and the game officials' directions.
+
+## Try the published app
+
+- **[Open the simulator on GitHub Pages](https://richzhou.github.io/hockey-clock-simulator/dist/)**
+- [Open the ChatGPT-hosted version](https://hockey-clock.chirpyvine19.chatgpt.site/)
+- [View the source on GitHub](https://github.com/richzhou/hockey-clock-simulator)
+
+Published copies can be on different versions and may lag behind the latest source in this repository.
+
+## Getting started
+
+1. Choose the arena/controller in the top bar: **Rosemary Brown Arena · Nevco 871** or **Kensington / Burnaby Lake · MPC-7 series**. The latter is a shared practice option; see the arena-identification notes below for the evidence and limitations.
+2. Open **Walkthroughs** to pick an individual task or a full-game scenario.
+3. Choose assisted training for instructions and highlighted keys, or unassisted full-game training with **Help** available when needed.
+4. On a phone, use **Hide board / Show board** to control the scoreboard display. The console supports portrait use.
+
+The full-game scenario covers a 5-minute warm-up, three 15-minute periods, 1-minute intermissions, goals and concurrent and carry-over penalties. Free practice lets you explore the controls without a guide.
+
+## Run locally
+
+Standalone HTML/CSS/JavaScript. Open `dist/index.html` or serve `dist/` with a static HTTP server. No other binary, database, or application packages are required.
 
 ## License
 
 The simulator's original code and documentation are available under the [MIT License](LICENSE). Referenced manufacturer manuals, photos, trademarks and other third-party materials remain subject to their owners' rights and are not licensed by this project.
+
+## Full game training
+
+Open **Walkthroughs**, then choose **Start assisted game** or **Start unassisted game**. Both models use one continuous sample game: a 5-minute warm-up, three 15-minute periods, two 1-minute intermissions, goals, concurrent minors on one team, penalties on both teams, selection and removal of the instructed second penalty, and penalties carried across both period boundaries. The final score is Home 3, Guest 1.
+
+Assisted mode lists the remaining keys and highlights the next control. Unassisted mode gives event cues without key instructions or highlights; **Help** reveals assistance for that event only. The completion screen reports mistakes and help requests. A wrong key names the mistaken key and the correct next control. Full-game training restores the console to the state immediately before that key, preserving correct digits and earlier game progress, so the user can continue directly. This coaching recovery also reveals the current guidance in unassisted mode until the next correct key. Free practice and the short walkthroughs retain normal console behavior. **Retry event** remains available for an unexpected result mismatch.
+
+Training time pauses at event cues while the operator responds. During play, **Skip to event** advances the real simulator clocks and penalty queues to the next cue; it never skips a required clock, score or penalty action. The handheld still needs to be moved OFF at each whistle and after each period-ending horn. Each model starts with penalty pause enabled in the sample setup; those settings and durations are practice choices, not verified arena configuration. At period end, both the main and penalty clocks stop automatically. Move the handheld to OFF. This scenario runs the intermission on the main clock, so each period-end cue reminds the operator to pause penalties. Press PENALTY ON/OFF and verify PENALTY CLOCKS PAUSED before starting the 1-minute break. Before the next faceoff, press PENALTY ON/OFF again and verify PENALTY CLOCKS ON. The button must be enabled in the console configuration. Intermissions preserve stored penalty time. Leaving training returns to the current game in free practice.
+
+Run `node --test full-game.test.js` for scenario and checkpoint checks. Run `node full-game.browser.test.cjs` with Playwright available to play both models in the browser. Existing short walkthroughs remain available in the same picker.
 
 ## Manual and training scope
 

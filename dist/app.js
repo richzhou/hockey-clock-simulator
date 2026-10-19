@@ -21,12 +21,12 @@ let sound=false,audioContext,lastHorn=0,hornUntil=0,heldOsc=null,autoOsc=null,ma
 function silenceHorn(){stopManualHorn();if(autoOsc){try{autoOsc.stop();}catch{}autoOsc=null;}hornUntil=0;}
 function playHorn(duration=900){if(autoOsc){try{autoOsc.stop();}catch{}autoOsc=null;}hornUntil=performance.now()+duration;if(!sound)return;try{audioContext??=new (window.AudioContext||window.webkitAudioContext)();audioContext.resume();const o=audioContext.createOscillator(),g=audioContext.createGain();autoOsc=o;o.onended=()=>{if(autoOsc===o)autoOsc=null;};o.type='sawtooth';o.frequency.value=180;g.gain.value=.06;o.connect(g);g.connect(audioContext.destination);o.start();g.gain.exponentialRampToValueAtTime(.001,audioContext.currentTime+duration/1000);o.stop(audioContext.currentTime+duration/1000);}catch{}}
 
-function press(key,source='console',powerConfirmed=false){if(!powerConfirmed&&(key==='power-on'||key==='power-off')){const turningOn=key==='power-on';$('power-dialog-title').textContent=turningOn?'Turn console power on?':'Turn console power off?';$('power-dialog-message').textContent=turningOn?'This starts the console’s power-on sequence.':'This stops the clock and turns off the console.';$('confirm-power').textContent=turningOn?'Power on':'Power off';$('power-dialog').dataset.powerAction=key;$('power-dialog').showModal();return;}const blocked=source!=='handheld'&&game.timeKeysLocked&&(key==='time-on'||key==='time-off');if(!blocked&&(key==='time-off'||key==='power-off'))silenceHorn();game.press(key,source);if(!blocked)practice.record(key,game);history.push(key);if(history.length>8)history.shift();$('history').replaceChildren(...history.map(k=>{const b=document.createElement('b');b.textContent=k.replaceAll('-',' ').toUpperCase();return b;}));render();}
+function press(key,source='console',powerConfirmed=false){if(!powerConfirmed&&(key==='power-on'||key==='power-off')){const turningOn=key==='power-on';$('power-dialog-title').textContent=turningOn?'Turn console power on?':'Turn console power off?';$('power-dialog-message').textContent=turningOn?'This starts the console’s power-on sequence.':'This stops the clock and turns off the console.';$('confirm-power').textContent=turningOn?'Power on':'Power off';$('power-dialog').dataset.powerAction=key;$('power-dialog').showModal();return;}const blocked=source!=='handheld'&&game.timeKeysLocked&&(key==='time-on'||key==='time-off');if(practice.fullGame&&practice.task)practice.beforePress(game);if(!blocked&&(key==='time-off'||key==='power-off'))silenceHorn();game.press(key,source);if(!blocked)practice.record(key,game);history.push(key);if(history.length>8)history.shift();$('history').replaceChildren(...history.map(k=>{const b=document.createElement('b');b.textContent=k.replaceAll('-',' ').toUpperCase();return b;}));render();}
 document.querySelector('.console').addEventListener('click',event=>{const b=event.target.closest('[data-key]');if(!b)return;if(b.dataset.key==='horn'&&b.dataset.heldClick==='true'){b.dataset.heldClick='false';return;}press(b.dataset.key);});
 const remoteHorn=$('handheld-horn');
 function stopManualHorn(){manualHorn=false;if(heldOsc){try{heldOsc.stop();}catch{}heldOsc=null;}clearTimeout(manualTimer);hornUntil=0;}
 function bindHorn(button,handheld=false){
- function begin(){if(!game.powered||game.mode.startsWith('startup-')||(!handheld&&game.set)||(handheld&&!game.handheldConnected))return false;silenceHorn();button.dataset.heldClick='true';manualHorn=true;hornUntil=performance.now()+4000;manualTimer=setTimeout(stopManualHorn,4000);if(sound){try{audioContext??=new (window.AudioContext||window.webkitAudioContext)();audioContext.resume();heldOsc=audioContext.createOscillator();const gain=audioContext.createGain();heldOsc.type='sawtooth';heldOsc.frequency.value=180;gain.gain.value=.06;heldOsc.connect(gain);gain.connect(audioContext.destination);heldOsc.start();}catch{}}practice.record('horn',game);render();return true;}
+ function begin(){if(!game.powered||game.mode.startsWith('startup-')||(!handheld&&game.set)||(handheld&&!game.handheldConnected))return false;if(practice.fullGame&&practice.task)practice.beforePress(game);silenceHorn();button.dataset.heldClick='true';manualHorn=true;hornUntil=performance.now()+4000;manualTimer=setTimeout(stopManualHorn,4000);if(sound){try{audioContext??=new (window.AudioContext||window.webkitAudioContext)();audioContext.resume();heldOsc=audioContext.createOscillator();const gain=audioContext.createGain();heldOsc.type='sawtooth';heldOsc.frequency.value=180;gain.gain.value=.06;heldOsc.connect(gain);gain.connect(audioContext.destination);heldOsc.start();}catch{}}practice.record('horn',game);if(practice.fullGame&&practice.feedback)stopManualHorn();render();return true;}
  button.addEventListener('pointerdown',e=>{if(begin())button.setPointerCapture(e.pointerId);});
  button.addEventListener('pointerup',stopManualHorn);button.addEventListener('pointercancel',()=>{button.dataset.heldClick='false';stopManualHorn();});
  button.addEventListener('keydown',e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();if(!e.repeat)begin();}});
@@ -38,7 +38,7 @@ $('remote-toggle').onclick=e=>{const rect=e.currentTarget.getBoundingClientRect(
 $('handheld-connect').onclick=()=>{silenceHorn();game.connectHandheld(!game.handheldConnected);game.unsupportedFeature=!game.handheldConnected&&game.powered?'To use console TIME keys, turn the control off, unplug the switch, and restart it.': '';guideSignature='';render();};
 function actionLabel(key){
  if(game.handheldConnected&&key==='time-on')return 'HANDHELD ON';if(game.handheldConnected&&key==='time-off')return 'HANDHELD OFF';
- const names={'home-penalty':'HOME VIEW PENALTY','guest-penalty':'GUEST VIEW PENALTY','timeout-start':'TIME OUT TIMER','penalty-clear':'CLEAR PENALTY','penalty-edit':'EDIT PENALTY','penalty-insert':'INSERT PENALTY','profiles':'SCROLL PROFILES','home-saves':'HOME GOAL SAVES','guest-saves':'GUEST GOAL SAVES','home-shots':'HOME GOAL SHOTS','guest-shots':'GUEST GOAL SHOTS'};
+ const names={'goal-reset':'GOAL LIGHT RESET','home-penalty':'HOME VIEW PENALTY','guest-penalty':'GUEST VIEW PENALTY','timeout-start':'TIME OUT TIMER','penalty-clear':'CLEAR PENALTY','penalty-edit':'EDIT PENALTY','penalty-insert':'INSERT PENALTY','profiles':'SCROLL PROFILES','home-saves':'HOME GOAL SAVES','guest-saves':'GUEST GOAL SAVES','home-shots':'HOME GOAL SHOTS','guest-shots':'GUEST GOAL SHOTS'};
  return isMPC7()&&names[key]||keyLabel(key);
 }
 
@@ -63,8 +63,9 @@ populateTasks();
 let guideSignature='';
 $('exercise').onchange=()=>{guideSignature='';render();};
 function resetHistory(){silenceHorn();lastHorn=game.hornEvent;history.length=0;$('history').textContent='Your key presses appear here.';last=performance.now();$('speed').value='1';}
-function startTask(){if($('task-dialog').open)$('task-dialog').close();setPhoneView('console');practice.start($('exercise').value,game);resetHistory();guideSignature='';render();}
+function startTask(){if(practice.fullGame)practice=new PracticeSession(activeTasks);if($('task-dialog').open)$('task-dialog').close();setPhoneView('console');practice.start($('exercise').value,game);resetHistory();guideSignature='';render();}
 function updateExercise(){
+ if(practice.fullGame&&practice.task){renderFullGameCoach();return;}
  const selected=$('exercise').value,active=practice.task,step=practice.current;
  const signature=JSON.stringify([selected,active?.title,game.handheldConnected,practice.stepIndex,practice.keyIndex,practice.completed,practice.failed,practice.feedback,step?.wait?game.running:null]);if(signature===guideSignature)return;guideSignature=signature;
  document.querySelectorAll('.next-key').forEach(b=>{b.classList.remove('next-key');b.removeAttribute('aria-description');});
@@ -80,17 +81,17 @@ function updateExercise(){
  if(practice.feedback){const hint=document.createElement('div');hint.className='mistake-hint';hint.id='practice-mistake-hint';const title=document.createElement('strong');title.textContent='Practice hint';const message=document.createElement('p');message.textContent=game.handheldConnected?practice.feedback.replaceAll('TIME ON','HANDHELD ON').replaceAll('TIME OFF','HANDHELD OFF'):practice.feedback;const restart=document.createElement('button');restart.type='button';restart.dataset.practice='restart';restart.textContent='Restart task';hint.append(title,message,restart);coach.append(hint);}
 }
 function renderTaskPreview(selected){if(selected==='free'){$('exercise-body').innerHTML='<p>Explore the console without a guide.</p><button class="guide-primary" data-practice="free">Use free practice</button>';return;}const task=activeTasks[selected];$('exercise-body').innerHTML='<p>'+task.description+'</p><p class="task-meta">'+task.steps.length+' guided steps</p><button class="guide-primary" data-practice="start">Start walkthrough</button><p class="task-note">Starts a new sample game.</p>';}
-function handlePracticeAction(event){const action=event.target.closest('[data-practice]')?.dataset.practice;if(action==='start')startTask();else if(action==='restart'){$('exercise').value=practice.id;startTask();}else if(action==='free'){practice.task=null;practice.completed=false;practice.failed=false;practice.feedback='';$('exercise').value='free';if($('task-dialog').open)$('task-dialog').close();$('exercise').onchange();}}
-$('exercise-body').addEventListener('click',handlePracticeAction);coach.addEventListener('click',handlePracticeAction);document.querySelector('.mobile-coach').addEventListener('click',handlePracticeAction);
+function handlePracticeAction(event){const action=event.target.closest('[data-practice]')?.dataset.practice;if(action==='game-assisted'||action==='game-unassisted'){startFullGame(action==='game-assisted');return;}if(action==='game-help'){practice.requestHelp();guideSignature='';render();return;}if(action==='game-retry'){silenceHorn();practice.retry(game);lastHorn=game.hornEvent;last=performance.now();guideSignature='';render();return;}if(action==='game-skip'){practice.skip(game);render();return;}if(action==='start')startTask();else if(action==='restart'){if(practice.fullGame)startFullGame(practice.assisted);else{$('exercise').value=practice.id;startTask();}}else if(action==='free'){if(practice.fullGame)practice=new PracticeSession(activeTasks);practice.task=null;practice.completed=false;practice.failed=false;practice.feedback='';$('exercise').value='free';if($('task-dialog').open)$('task-dialog').close();$('exercise').onchange();}}
+$('task-dialog').addEventListener('click',handlePracticeAction);coach.addEventListener('click',handlePracticeAction);document.querySelector('.mobile-coach').addEventListener('click',handlePracticeAction);
 $('sound').onclick=()=>{sound=!sound;$('sound').textContent=sound?'♬ Sound on':'♬ Sound off';$('sound').setAttribute('aria-pressed',String(sound));};
 $('help-toggle').onclick=()=>{$('reference').open=!$('reference').open;if($('reference').open)$('reference').scrollIntoView({behavior:'smooth',block:'center'});};
 $('cancel-power').onclick=()=>$('power-dialog').close();$('confirm-power').onclick=()=>{const key=$('power-dialog').dataset.powerAction;$('power-dialog').close();press(key,'console',true);};
-$('reset').onclick=()=>$('reset-dialog').showModal();$('cancel-reset').onclick=()=>$('reset-dialog').close();$('confirm-reset').onclick=()=>{game.reset();resetHistory();practice.task=null;practice.feedback='';$('exercise').value='free';$('exercise').onchange();$('reset-dialog').close();render();};
-document.addEventListener('keydown',e=>{if(['SELECT','INPUT','TEXTAREA','BUTTON'].includes(document.activeElement.tagName)||document.querySelector('dialog[open]'))return;if(e.repeat)return;let key=/^\d$/.test(e.key)?e.key:({Enter:'yes',Escape:'no',s:'set',t:'time',h:'horn',' ':(game.handheldConnected?game.handheldOn:game.running)?'time-off':'time-on'})[e.key];if(e.key==='Backspace'){e.preventDefault();game.buffer=game.buffer.slice(0,-1);render();return;}if(!key)return;e.preventDefault();const handheld=game.handheldConnected&&e.key===' ';press(key,handheld?'handheld':'console');const b=handheld?$('remote-toggle'):document.querySelector(`[data-key="${key}"]`);b?.classList.add('pressed');setTimeout(()=>b?.classList.remove('pressed'),130);});
+$('reset').onclick=()=>$('reset-dialog').showModal();$('cancel-reset').onclick=()=>$('reset-dialog').close();$('confirm-reset').onclick=()=>{game.reset();resetHistory();if(practice.fullGame)practice=new PracticeSession(activeTasks);practice.task=null;practice.feedback='';$('exercise').value='free';$('exercise').onchange();$('reset-dialog').close();render();};
+document.addEventListener('keydown',e=>{if(['SELECT','INPUT','TEXTAREA','BUTTON'].includes(document.activeElement.tagName)||document.querySelector('dialog[open]'))return;if(e.repeat)return;let key=/^\d$/.test(e.key)?e.key:({Enter:'yes',Escape:'no',s:'set',t:'time',h:'horn',' ':(game.handheldConnected?game.handheldOn:game.running)?'time-off':'time-on'})[e.key];if(e.key==='Backspace'){e.preventDefault();if(practice.fullGame){press('backspace');return;}game.buffer=game.buffer.slice(0,-1);render();return;}if(!key)return;e.preventDefault();const handheld=game.handheldConnected&&e.key===' ';press(key,handheld?'handheld':'console');const b=handheld?$('remote-toggle'):document.querySelector(`[data-key="${key}"]`);b?.classList.add('pressed');setTimeout(()=>b?.classList.remove('pressed'),130);});
 const mobileLayout=window.matchMedia('(max-width:800px), (max-width:1000px) and (max-height:600px)');
 const taskCard=document.querySelector('.practice-card');$('task-picker').append(taskCard);
 const toolsHome=document.createElement('div');document.querySelector('.under-console').before(toolsHome);const referenceHome=document.createElement('div');$('reference').before(referenceHome);
-function openTaskPicker(){if(practice.task)$('exercise').value=practice.id;guideSignature='';render();$('task-dialog').showModal();}
+function openTaskPicker(){if(practice.task&&!practice.fullGame)$('exercise').value=practice.id;guideSignature='';render();$('task-dialog').showModal();}
 $('task-toggle').onclick=openTaskPicker;$('task-close').onclick=()=>$('task-dialog').close();
 $('tools-toggle').onclick=()=>{$('tools-content').append(document.querySelector('.under-console'),$('reference'));$('tools-dialog').showModal();};
 $('tools-close').onclick=()=>$('tools-dialog').close();
@@ -110,6 +111,8 @@ updateBoardControl();
 function setText(id,value){if($(id).textContent!==value)$(id).textContent=value;}
 function updateMobileUI(){
  setText('focus-time',formatTime(game.time,game.tenths));setText('focus-score','HOME '+game.home.score+' · GUEST '+game.guest.score);setText('focus-period','P'+game.period+' · '+(game.running?'RUNNING':'STOPPED'));
+ if(practice.fullGame&&practice.task){renderFullGameMobile();return;}
+ if($('mobile-actions').dataset.fullGame){delete $('mobile-actions').dataset.fullGame;delete $('mobile-actions').dataset.actions;$('mobile-actions').innerHTML='<button type="button" data-practice="restart">Restart</button><button type="button" data-practice="free">Free practice</button>';}
  const active=practice.task,step=practice.current,failed=practice.failed;
  const next=active&&!practice.completed?(step.wait?(game.running?'Watch the clocks':'Tap '+actionLabel('time-on')):failed?'Restart this task':'Tap '+actionLabel(practice.expected)):'Explore the console';
  setText('mobile-step',active?(practice.completed?'TASK COMPLETE':'STEP '+(practice.stepIndex+1)+' OF '+active.steps.length):'FREE PRACTICE');
@@ -119,7 +122,7 @@ function updateMobileUI(){
  const feedback=practice.feedback?(failed?'The result changed. Restart this task.':wrong?'Pressed '+wrong[1]+'. '+next+'.':'Keep the clock running for this step.'):'';
  setText('mobile-feedback',feedback);$('mobile-feedback').hidden=!feedback;document.querySelector('.mobile-coach').classList.toggle('has-hint',!!feedback);$('mobile-actions').hidden=!active;
 }
-let last=performance.now();setInterval(()=>{const now=performance.now(),elapsed=now-last;last=now;game.tick(elapsed*Number($('speed').value));render();},50);
+let last=performance.now();setInterval(()=>{const now=performance.now(),elapsed=now-last;last=now;if(practice.fullGame&&practice.task)practice.tick(game,elapsed*Number($('speed').value));else game.tick(elapsed*Number($('speed').value));render();},50);
 const legacyReference=$('reference').querySelector('div').innerHTML;
 $('machine-model').onchange=()=>{
  if(currentModel===$('machine-model').value)return;currentModel=$('machine-model').value;
@@ -130,3 +133,30 @@ $('machine-model').onchange=()=>{
  for(const team of ['home','guest'])$(team+'-saves-summary').hidden=!isMPC7();resetHistory();guideSignature='';setPhoneView('console');render();
 };
 $('exercise').onchange();render();
+
+function startFullGame(assisted){
+ if($('task-dialog').open)$('task-dialog').close();practice=new FullGameSession(currentModel,assisted);practice.start('full-game',game);$('exercise').value='free';resetHistory();guideSignature='';setPhoneView('console');render();
+}
+function fullGameText(){
+ const p=practice,s=p.current;if(p.completed)return {title:'Full game complete · HOME 3–1 GUEST',detail:'Three periods finished. '+p.mistakes+' mistakes · '+p.helpRequests+' help requests. Choose Walkthroughs for another game.'};
+ const instruction=p.guidance&&!p.failed?(s.wait?' '+(game.running?s.instruction:'Use '+actionLabel('time-on')+' to resume play.'):' Next: '+s.keys.slice(p.keyIndex).map(actionLabel).join(' → ')+'.'):'';
+ return {title:p.failed?'Retry this event':s.title,detail:s.cue+instruction};
+}
+function gameButtons(){
+ const p=practice;if(p.completed)return '<button type="button" data-practice="free">Free practice</button>';
+ return (!p.assisted?'<button type="button" data-practice="game-help">Help</button>':'')+(p.failed?'<button type="button" data-practice="game-retry">Retry event</button>':p.current.wait?'<button type="button" data-practice="game-skip" '+(!game.running?'disabled':'')+'>Skip to event</button>':'')+'<button type="button" data-practice="free">Exit game</button>';
+}
+function renderFullGameCoach(){
+ const p=practice,s=p.current,text=fullGameText();const signature=JSON.stringify(['full-game',p.stepIndex,p.keyIndex,p.failed,p.helpShown,p.mistakeHelp,p.completed,p.feedback,game.running,game.handheldConnected]);if(signature===guideSignature)return;guideSignature=signature;
+ document.querySelectorAll('.next-key').forEach(b=>{b.classList.remove('next-key');b.removeAttribute('aria-description');});
+ coach.hidden=false;coach.classList.toggle('has-hint',p.failed);coach.replaceChildren();
+ const head=document.createElement('div'),small=document.createElement('small'),title=document.createElement('b'),detail=document.createElement('span'),controls=document.createElement('div');
+ small.textContent=(p.assisted?'ASSISTED':'UNASSISTED')+' FULL GAME · '+(p.completed?'COMPLETE':'EVENT '+(p.stepIndex+1)+' / '+p.task.steps.length);title.textContent=text.title;detail.textContent=text.detail;head.append(small,title);controls.className='full-game-actions';controls.innerHTML=gameButtons();coach.append(head,detail,controls);
+ if(p.feedback){const feedback=document.createElement('p');feedback.className='full-game-feedback';feedback.textContent=p.feedback;coach.append(feedback);}
+ if(!p.completed&&!p.failed&&p.guidance&&!s.wait){const key=p.expected,b=game.handheldConnected&&['time-on','time-off'].includes(key)?$('remote-toggle'):document.querySelector('[data-key="'+key+'"]');b?.classList.add('next-key');b?.setAttribute('aria-description','Next key in full game training');title.textContent=s.title+' · '+actionLabel(key);}
+ renderTaskPreview($('exercise').value);
+}
+function renderFullGameMobile(){
+ const p=practice,text=fullGameText();setText('mobile-step',(p.assisted?'ASSISTED':'UNASSISTED')+' GAME · '+(p.completed?'DONE':(p.stepIndex+1)+'/'+p.task.steps.length));setText('mobile-next',text.title);setText('mobile-instruction',text.detail);setText('mobile-feedback',p.feedback);$('mobile-feedback').hidden=!p.feedback;document.querySelector('.mobile-coach').classList.toggle('has-hint',p.failed);
+ const controls=$('mobile-actions'),markup=gameButtons();controls.dataset.fullGame='true';controls.hidden=false;if(controls.dataset.actions!==markup){controls.innerHTML=markup;controls.dataset.actions=markup;}
+}
