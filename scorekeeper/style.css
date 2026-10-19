@@ -30,3 +30,5 @@ dialog{background:#3a3f45;color:#eef1f3;border-color:#686f77}dialog::backdrop{ba
 
 /* A single compact practice row leaves the scoresheet the rest of the viewport. */
 [hidden]{display:none!important}.compact-controls{display:flex;gap:7px;align-items:center;margin-bottom:7px}.compact-controls button{min-height:36px;font-size:12px;background:#393e44;color:#edf0f1;border-color:#596068}#practice-toggle{flex:1;min-width:0;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.practice-compact{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr)}.practice-compact .training-bar{height:auto;max-height:30dvh;padding:4px 12px;border-right:0;border-bottom:1px solid var(--line)}.practice-compact .compact-controls{margin:0}.practice-compact #feedback.ok{display:none}.practice-compact #feedback{margin:4px 0 0}.compact-controls [data-action=sync]{font-size:11px;white-space:normal;max-width:145px}
+
+.setup-shortcut{max-width:520px;margin:18px auto;padding:12px;border:1px solid #596068;border-radius:6px}.setup-shortcut button{width:100%;background:#076b9d;color:#fff;border-color:#197ead}.setup-shortcut p{margin:8px 0 0;font-size:11px}

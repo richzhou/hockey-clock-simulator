@@ -81,3 +81,9 @@ Serve the repository locally, then point `browser.test.cjs`, `full-game.browser.
 After a successful demo login, or when opening a task that starts in-game, the practice controls and coach collapse into one row. Its toggle restores Home, Choose practice, About and guidance without changing the game. Help, error feedback and the simulated-sync action remain accessible while compact; successful-save notices do not consume extra space. The toggle displays the current task step or completion.
 
 Passed 161 model checks, the detailed desktop/phone control suite, and full-game/wrap-up runs in assisted and unassisted modes on both screen sizes (8 runs). Browser checks confirm automatic collapse below 60px, expand/collapse without state changes, visible Help, wrong-entry recovery and completion through sync. The phone layout was inspected visually. Both clock models and shared navigation smoke checks passed.
+
+## One-click pregame shortcut: 19 October 2026
+
+Demo login and pregame offer Skip pregame setup → Start playing. It fills the canonical fictional rosters, selected volunteers and officials, sets three 15-minute periods with actual start 18:00 and Remaining Time, then starts with no events. Partial setup is replaced with sample values. Full-game training resumes at the opening goal; ordinary setup remains available.
+
+Passed 163 model tests, desktop/phone quick-start checks after partial setup (including recording a goal), normal setup/control regressions, and all 25 remaining full-game steps after skipping in assisted/unassisted mode on desktop and phone (4 runs). These runs include mistakes, Help, concurrent and carry-over penalties and final sign-off. Both clock smoke checks and shared navigation passed.

@@ -18,6 +18,8 @@ The sample team has 16 fictional players in total: 14 skaters plus two goalies. 
 
 Use **Full game simulation** or **Task walkthroughs** on the opening screen, or **Choose practice** at any time. The chooser groups the complete game separately from specific tasks, including pregame setup/lookup and End Game times, review and sign-off. The End Game exercise starts with the completed sample game sheet so you can rehearse the final steps without replaying the game. Assisted mode shows instructions. Unassisted mode shows events and offers Help. An incorrect saved answer explains what to fix and leaves the form open without changing the practice sheet. Help is also available inside entry dialogs and preserves the unfinished form. Opening Help during simulated sync preserves the completion control.
 
+Use **Skip pregame setup → Start playing** on demo login or the pregame screen to fill all sample setup details in one click. It starts three 15-minute periods at 18:00 with Remaining Time and jumps full-game training to its opening goal. Partial pregame entries are replaced with the sample details. The normal setup remains available for practising it.
+
 The full game contains pregame checks, three periods, goals and assists, a corrected scorer, a power-play penalty release, concurrent penalties, a carry-over penalty, a goalie change, period-length correction, bench penalty, optional shots/notes and final sign-off. Period lengths and game events are sample exercises, not league rules. There is no running arena clock or automatic penalty/manpower decision.
 
 ## Source references and fidelity
