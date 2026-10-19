@@ -25,7 +25,7 @@ Playwright uses installed Chrome with separate test contexts and fictional data.
 | Clock full games | Both models, desktop/phone, assisted/unassisted: 8 complete games of 69 events, with Help, wrong-key recovery, warm-up, intermissions, concurrent/carry-over penalties and final score. |
 | Clock portrait | Both models at 375x667, 390x844 and 430x932: 6 runs covering live board, hide/show while running, long hints, rotation and fit. |
 | Power and navigation | Cancel/Escape/confirm power changes on both models and viewport types; clock-to-scorekeeper link and shared Home navigation at 320, 375 and 1440px. |
-| Model checks | 153 passing tests across clocks and scorekeeper. |
+| Model checks | 161 passing tests across clocks and scorekeeper. |
 
 ## Findings and corrections
 
@@ -48,21 +48,21 @@ Clock entry is different: 871 enters duration before player number; MPC-7 enters
 - The old Kensington/Burnaby Lake sheets do not identify MPC-7 and describe legacy sequences. The grouped arena option is the requested practice setup, not proof of installed hardware; MPC-7 behavior follows its manufacturer manual and sample profile.
 - Clock advanced configuration, pairing and accessories remain outside scope. Test success does not establish equivalence for every firmware, saved profile or arena configuration.
 
-## Follow-up: official screenshots and remaining fidelity gaps
+## Follow-up: official screenshot alignment
 
 The official help page exposes full-resolution screenshot attachments. These were downloaded only to temporary reference files and inspected visually after the workflow audit; they are not bundled with the simulator. The guide reports a 15 December 2025 update, and individual screenshots can represent different versions/settings. No live Spordle account was used to confirm current production screens.
 
-| Official screenshot | Confirmed difference in the simulator |
+| Official screenshot | Implemented alignment and limits |
 | --- | --- |
-| [Start Game](https://help.spordle.com/download/attachments/3489202177/Scorekeeper%20F32.png) | The screenshot includes actual Start Time of game and an overtime length. Practice collects actual start only at End Game and limits exercises to three regulation periods. |
-| [Time-entry choice](https://help.spordle.com/download/attachments/3489202177/Scorekeeper%20F33.png) | The screenshot offers Elapsed Time, Remaining Time and Previous. Practice offers Remaining Time only, as required by the supplied training, without a Previous control. |
-| [Infraction by section](https://help.spordle.com/download/attachments/3489202177/Scorekeeper%2083.png) | The screenshot opens a separate Select Infraction screen with penalty combinations specific to the selected infraction. Practice uses an inline generic severity selector. |
-| [Infraction by code](https://help.spordle.com/download/attachments/3489202177/Scorekeeper%2081.png) | The screenshot uses codes such as A22 and combined charges. Practice searches Hockey Canada rule references such as 9.3; those are not equivalent regional app codes. |
-| [Review Game](https://help.spordle.com/download/attachments/3489202177/Scorekeeper%20A.png) | The screenshot includes Back, Edit and Delete on the review page. Practice now displays every recorded event there but remains read-only; saved-entry editing/deletion is available during the game. |
-| [Goalie change](https://help.spordle.com/download/attachments/3489202177/Scorekeeper%2093.png) | The screenshot uses selectable goalie masks and outgoing/incoming positions. Practice uses a goalie dropdown and the Swap/Pull/Return actions. |
-| [Penalty participants](https://help.spordle.com/download/attachments/3489202177/Scorekeeper%20F34.png) | The screenshot distinguishes jerseys, goalie masks, coach jackets and bench shapes. Practice currently uses jersey-shaped buttons with labels for all roles. |
+| [Start Game](https://help.spordle.com/download/attachments/3489202177/Scorekeeper%20F32.png) | Actual start time is required at Start Game, validated and retained through End Game. Exercises cover three regulation periods; overtime remains outside scope. |
+| [Time-entry choice](https://help.spordle.com/download/attachments/3489202177/Scorekeeper%20F33.png) | Elapsed Time, Remaining Time and Previous are available. Previous preserves start time and period lengths. Guided exercises require Remaining Time; free practice supports elapsed chronology. |
+| [Infraction by section](https://help.spordle.com/download/attachments/3489202177/Scorekeeper%2083.png) | Separate Select Infraction screen with infraction-specific assessment choices. Selecting, cancelling, Escape and Help preserve the parent penalty draft and Off/Start readings. |
+| [Infraction by code](https://help.spordle.com/download/attachments/3489202177/Scorekeeper%2081.png) | Slashing includes the verified screenshot examples A22, B22 + D22 and B22 + E22, labelled as guide examples. Other entries use Hockey Canada rule references; the complete current regional codebook and every combined charge are not reproduced. |
+| [Review Game](https://help.spordle.com/download/attachments/3489202177/Scorekeeper%20A.png) | Back, Edit and Delete are available. Corrections preserve final times and invalidate sign-off. Officials Back requires re-review and initials. Guided corrections/navigation retain exercise progress. |
+| [Goalie change](https://help.spordle.com/download/attachments/3489202177/Scorekeeper%2093.png) | Selectable goalie masks, outgoing/incoming labels and Swap/Pull/Return. Historical edits calculate the outgoing goalie at that event. |
+| [Penalty participants](https://help.spordle.com/download/attachments/3489202177/Scorekeeper%20F34.png) | Original CSS jerseys, goalie masks, coach jackets and bench shapes distinguish participant roles. No official screenshot assets are bundled. |
 
-These are open fidelity gaps or deliberate scope limits, not passing equivalence checks. The browser audit verifies the implemented exercises; it does not establish an exact recreation of all official screens. Higher-priority follow-up items are start-time entry at Start Game, correction/navigation during final review, and the separate infraction selection flow.
+The follow-up passed all 44 local scenario runs, detailed control checks on desktop and phone, and 161 combined model tests. Focused checks cover actual-start validation, Previous, elapsed chronology, separate infraction selection/cancellation, goalie masks, review correction/deletion, Back and sign-off invalidation, and contextual Help after Back. Penalty menus were cross-checked against the relevant Hockey Canada 2026–28 rule subsections; the referee still supplies the actual assessment. These checks verify the implemented exercises, not every official screen, regional setting or current live-app version.
 
 ## Repeat the checks
 
