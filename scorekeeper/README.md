@@ -16,7 +16,7 @@ The app fills the viewport, with no branding header or disclaimer footer. **← 
 
 The sample team has 16 fictional players in total: 14 skaters plus two goalies. This is a practice roster, not a claim about league roster limits. Pregame attendance selections control which skaters appear in goal and penalty pickers. The charcoal panels, blue action buttons, dark entry dialogs and green/yellow/white player selections follow the app shown in the supplied training video; the simulator retains its own name and disclaimer.
 
-Choose **Choose practice** for a full game or a focused task. Assisted mode shows instructions. Unassisted mode shows events and offers Help. An incorrect saved answer explains what to fix and leaves the form open without changing the practice sheet.
+Use **Full game simulation** or **Task walkthroughs** on the opening screen, or **Choose practice** at any time. The chooser groups the complete game separately from specific tasks, including pregame setup/lookup and End Game times, review and sign-off. The End Game exercise starts with the completed sample game sheet so you can rehearse the final steps without replaying the game. Assisted mode shows instructions. Unassisted mode shows events and offers Help. An incorrect saved answer explains what to fix and leaves the form open without changing the practice sheet.
 
 The full game contains pregame checks, three periods, goals and assists, a corrected scorer, a power-play penalty release, concurrent penalties, a carry-over penalty, a goalie change, period-length correction, bench penalty, optional shots/notes and final sign-off. Period lengths and game events are sample exercises, not league rules. There is no running arena clock or automatic penalty/manpower decision.
 
