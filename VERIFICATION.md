@@ -124,3 +124,11 @@ The focused suite completes final times through Finish at 320, 375, 430 and 768p
 The collapsed practice bar now includes a persistent current-event card for active training tasks. It displays the scenario cue, including period, time and participants, without needing to expand the menu. Entry dialogs repeat that cue in their fixed header while the form scrolls. Unassisted mode displays the event only; answer steps remain behind Help. Expanded practice shows its existing full coach, avoiding duplicate cards. Free practice has no event card.
 
 Passed all full-game and wrap-up exercises on phone and desktop in both modes (8 runs). Browser assertions check the correct cue before every compact-state event and its presence in goal dialogs. The four-width entry/sign-off suite also passed; mobile dialog screenshots were inspected visually.
+
+## Expanded guidance without page shuttling: 19 October 2026
+
+The practice coach now scrolls in its own bounded pane rather than pushing the app below the viewport. On small screens the main guidance uses at most about a third of the viewport, retaining at least 60% for the app in tested layouts. The page itself does not scroll. Long sheets and forms still scroll locally.
+
+Entry headers include a bounded event/steps pane. Assisted mode opens its steps when the main practice panel is expanded; unassisted mode shows no answer text until the user requests Show steps or Help. Guidance scrolling preserves form values and form scroll position. Entry bodies scroll independently; phone/short-landscape Save/Next actions are pinned to the bottom. Wide/tall entry dialogs also retain a fixed header with a separate form scroller.
+
+The new guidance browser suite covers 320x568, 375x667, 390x844, 844x390, 768x1024 and 1440x900 in both assistance modes (12 cases), using short goal instructions and the long Major-penalty hint. It checks panel bounds, usable form space, independent scrolling, no page overflow, retained values and on-screen Save. The entry/sign-off suite passed at four widths; full-game and wrap-up scenarios passed in both modes on phone/desktop (8 runs). Screenshots were inspected for small portrait and short landscape layouts.
