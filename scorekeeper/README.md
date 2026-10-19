@@ -40,7 +40,7 @@ The Major/Match walkthroughs explicitly practise time-first entry, following the
 
 The screens, styling and implementation are original. No Spordle logos, proprietary source, screenshot assets, video footage or real rosters are included. Third-party names and linked materials belong to their owners. MIT applies only to the original project code; linked reference material is not relicensed.
 
-See [the combined verification report](../VERIFICATION.md) for browser coverage, fixes and accuracy boundaries.
+See [the combined verification report](../VERIFICATION.md) for browser coverage, fixes, full-resolution official screenshot links and remaining fidelity gaps. In particular, actual start-time entry at Start Game, editable final review, the separate infraction screen and role-specific icons are not yet reproduced.
 
 ## Tests
 

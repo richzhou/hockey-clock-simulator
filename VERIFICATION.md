@@ -12,7 +12,7 @@ This audit checks the implemented practice workflows, not all features of the re
 
 ## Browser coverage
 
-Playwright uses installed Chrome with separate test contexts and fictional data. Initial checks ran against the public GitHub Pages release; corrections were retested on an isolated loopback server. Screenshots and raw logs remain outside Git.
+Playwright uses installed Chrome with separate test contexts and fictional data. Initial checks ran against the public GitHub Pages release; corrections were retested on an isolated loopback server. Screenshots and raw logs remain outside Git. After deployment, desktop and phone smoke checks passed for the public clock link, manager note, Help inside entry forms, correction without losing values, full review, Help during sync and time-first Major instructions.
 
 | Suite | Coverage |
 | --- | --- |
@@ -47,6 +47,22 @@ Clock entry is different: 871 enters duration before player number; MPC-7 enters
 - The scorekeeper lookup, rosters, initials, submission and sync are fictional/local. No real Spordle or HCR account is queried. Exact regional penalty-code mappings, eligibility, every combined charge and overtime/shootout remain outside scope.
 - The old Kensington/Burnaby Lake sheets do not identify MPC-7 and describe legacy sequences. The grouped arena option is the requested practice setup, not proof of installed hardware; MPC-7 behavior follows its manufacturer manual and sample profile.
 - Clock advanced configuration, pairing and accessories remain outside scope. Test success does not establish equivalence for every firmware, saved profile or arena configuration.
+
+## Follow-up: official screenshots and remaining fidelity gaps
+
+The official help page exposes full-resolution screenshot attachments. These were downloaded only to temporary reference files and inspected visually after the workflow audit; they are not bundled with the simulator. The guide reports a 15 December 2025 update, and individual screenshots can represent different versions/settings. No live Spordle account was used to confirm current production screens.
+
+| Official screenshot | Confirmed difference in the simulator |
+| --- | --- |
+| [Start Game](https://help.spordle.com/download/attachments/3489202177/Scorekeeper%20F32.png) | The screenshot includes actual Start Time of game and an overtime length. Practice collects actual start only at End Game and limits exercises to three regulation periods. |
+| [Time-entry choice](https://help.spordle.com/download/attachments/3489202177/Scorekeeper%20F33.png) | The screenshot offers Elapsed Time, Remaining Time and Previous. Practice offers Remaining Time only, as required by the supplied training, without a Previous control. |
+| [Infraction by section](https://help.spordle.com/download/attachments/3489202177/Scorekeeper%2083.png) | The screenshot opens a separate Select Infraction screen with penalty combinations specific to the selected infraction. Practice uses an inline generic severity selector. |
+| [Infraction by code](https://help.spordle.com/download/attachments/3489202177/Scorekeeper%2081.png) | The screenshot uses codes such as A22 and combined charges. Practice searches Hockey Canada rule references such as 9.3; those are not equivalent regional app codes. |
+| [Review Game](https://help.spordle.com/download/attachments/3489202177/Scorekeeper%20A.png) | The screenshot includes Back, Edit and Delete on the review page. Practice now displays every recorded event there but remains read-only; saved-entry editing/deletion is available during the game. |
+| [Goalie change](https://help.spordle.com/download/attachments/3489202177/Scorekeeper%2093.png) | The screenshot uses selectable goalie masks and outgoing/incoming positions. Practice uses a goalie dropdown and the Swap/Pull/Return actions. |
+| [Penalty participants](https://help.spordle.com/download/attachments/3489202177/Scorekeeper%20F34.png) | The screenshot distinguishes jerseys, goalie masks, coach jackets and bench shapes. Practice currently uses jersey-shaped buttons with labels for all roles. |
+
+These are open fidelity gaps or deliberate scope limits, not passing equivalence checks. The browser audit verifies the implemented exercises; it does not establish an exact recreation of all official screens. Higher-priority follow-up items are start-time entry at Start Game, correction/navigation during final review, and the separate infraction selection flow.
 
 ## Repeat the checks
 
