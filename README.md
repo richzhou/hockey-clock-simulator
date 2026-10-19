@@ -12,7 +12,7 @@ Two browser-based practice simulators created for **Burnaby minor hockey volunte
 - [Open the ChatGPT-hosted version](https://hockey-clock.chirpyvine19.chatgpt.site/)
 - [View the source on GitHub](https://github.com/richzhou/hockey-clock-simulator)
 
-Published copies can be on different versions and may lag behind the latest source in this repository.
+Published copies can be on different versions and may lag behind the latest source in this repository. GitHub Pages is the current combined release. The clock toolbar links directly to Scorekeeping practice; the scorekeeper Home button returns to the shared tool picker.
 
 ## Scorekeeping practice
 
@@ -34,6 +34,8 @@ Standalone HTML/CSS/JavaScript. Open the root `index.html` to choose a simulator
 ## Combined repository and GitHub Pages
 
 This repository contains both apps. `index.html` is the shared home page, `dist/` is clock practice, and `scorekeeper/` is scorekeeping practice. GitHub Pages publishes `main` from `/(root)`; no build pipeline or backend is needed. Keep the directories intact when uploading the source. GitHub releases do not update the older, separate ChatGPT-hosted clock copy.
+
+See [the browser/manual verification report](VERIFICATION.md) for the current audit coverage, fixes and reference differences.
 
 Run both model suites with `node --test engine.test.js walkthroughs.test.js mpc7.test.js full-game.test.js scorekeeper.test.cjs`. Run `node scorekeeper.browser.test.cjs` for the combined home/navigation and scorekeeping browser checks, `node scorekeeper-controls.browser.test.cjs` for the detailed scorekeeper controls and editing regressions, and the existing clock browser suites for clock operations.
 
